@@ -1,0 +1,10 @@
+Caso de uso: Cadastro
+Visão Geral: O usuário realiza o login na plataforma utilizando seu login e sua senha; Usuário seleciona a aba de cadastro; o usuário escolhe se deseja cadastrar uma disciplina, um professor, um aluno ou uma turma. Usuário insere os dados de cadastro e realiza o cadastro; usuário pode realizar mais cadastros ou voltar a aba inicial.
+Caso de uso: Buscar
+Visão Geral: O usuário realiza o login na plataforma utilizando seu login e sua senha; Usuário seleciona a aba de buscar; usuário especifica se está pesquisando uma disciplina, um professor, um aluno ou uma turma. Usuário realiza a busca utilizando dados específicos; Sistema retorna ao Usuário uma lista com o resultado utilizando o filtro requisitado; usuário pode selecionar excluir, alterar ou retornar a aba inicial.
+Caso de uso: Excluir
+Visão Geral: Usuário seleciona a aba de excluir; o usuário escolhe o que deseja excluir e confirma a exclusão, seja , um professor, um aluno ou uma turma. Sistema apaga o dado e confirma ao usuário a exclusão; usuário pode realizar mais exclusões ou voltar a aba inicial.
+Caso de uso: Editar
+Visão Geral: Usuário seleciona a aba de editar; o usuário escolhe o que deseja editar e confirma a alteração, seja , um professor, um aluno ou uma turma; Sistema retorna os dados que o usuário requisitou a alteração como na aba de cadastro; Usuário realiza as alterações e confirma; O sistema edita os dados e confirma ao usuário a alteração; usuário pode realizar mais alterações ou voltar a aba inicial.
+Caso de uso: Gerar Relatórios
+Visão Geral: O usuário realiza o login na plataforma utilizando seu login e sua senha; Usuário seleciona a aba de gerar relatórios; O sistema retorna uma planilha listando um relatório geral por turma, disciplina, aluno e professor, em ordem alfabética; O usuário recebe a planilha; usuário pode retornar a aba inicial.
