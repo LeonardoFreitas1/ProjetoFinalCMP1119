@@ -1,0 +1,56 @@
+<?page title="Login"?>
+<zk>
+
+<style>
+GridLayoutNoBorder tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid
+{
+border: none;
+overflow: hidden;
+zoom: 1;
+background: white;
+border-top: none;
+border-left: none;
+border-right: none;
+border-bottom: none;
+margin-left: 10%;
+}
+
+</style>
+
+<vbox height="100%" width="100%" pack="center" align="center">
+	    <div height="100%" width="100%" align="center">
+	    <window title="Login Usuario" border="none" width="60%" apply="br.com.LeonardoFreitas.Controllers.ControllerLogin">
+	        <grid sclass="myGridWithNoBorder" id="dataGrid" height="300px">
+	            <columns>
+	                <column width="150px"/>
+	                <column width="*"/>
+	            </columns>
+	            <rows id="colunas">
+	            	<row zclass="none">
+	            		<space/>
+	            		<space/>
+	            	</row>
+	            	<row zclass="none">
+	            		Matricula: <textbox id="matricula" placeholder="matricula"/>
+	            	</row>
+	            	<row zclass="none">
+	            		<space/>
+	            		<space/>
+	            	</row>
+	            	<row zclass="none">
+	            		senha: <textbox id="senha" type="password" placeholder="senha"/>
+	            	</row >
+	            	<row zclass="none">
+	            		<space/>
+	            		<space/>
+	            	</row>
+	            	<row zclass="none">
+	            		<space/>
+	            		<button id="Loginsubmit" label="entrar"/>
+	            	</row>
+	            </rows>
+	        </grid>
+	        </window>
+	    </div>
+	</vbox>
+</zk>

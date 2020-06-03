@@ -1,0 +1,100 @@
+<?page title="Usuario" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vbox height="100%" width="100%" pack="center" align="center">
+	    <div height="100%" width="1000px" align="center">
+			<window id="Secao" title="Cadastro de Alunos" width="100%" apply="br.com.LeonardoFreitas.Controllers.ControllerMenuAlunos">
+					<tabbox>
+					<tabs>
+						<tab label="Cadastro" id="tabMcs"/>
+						<tab label="Pesquisar" id="tabPs"/>
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<grid>
+								<columns>
+									<column label="" width="100px"/>
+									<column label=""/>
+								</columns>
+								<rows>
+									<row>
+										<label value="id" />
+										<textbox id="CadastroId" disabled="true" cols="50"/>
+									</row>
+									<row>
+										<label value="Nome" />
+										<textbox id="CadastroNome" cols="50"/>
+									</row>
+									<row>
+										<label value="Matricula" />
+										<textbox id="CadastroMatricula" cols="50"/>
+									</row>
+									<row>
+										<label value="Senha" />
+										<textbox id="CadastroSenha" type="password" cols="50"/>
+									</row>
+									<row>
+										<label value="Tipo Usuario" />
+										<combobox id="CadastroTipo" disabled="true" text="Aluno">
+		    								<comboitem label="Professor"/>
+		    								<comboitem label="Aluno"/>
+										</combobox>
+									</row>
+										<row>
+										<label value="Permissao" />
+										<combobox id="CadastroPermissao"  text="Padrão">
+		    								<comboitem label="Admin"/>
+		    								<comboitem label="Padrão"/>
+										</combobox>
+									</row>
+								</rows>
+							</grid>						
+							<groupbox>
+								<div align="center">
+								<button id="CadastroSubmit" label="Incluir"/>
+								<button id="CadastroAlterar" label="Alterar"/>
+								<button id="CadastroExcluir" label="Excluir"/>
+								<button id="CadastroLimpar" label="Limpar"/>
+								</div>
+							</groupbox>
+						</tabpanel>
+						
+						<tabpanel>
+						
+							<grid>
+								<columns>
+									<column label="" width="200px"/>
+									<column label="" />
+								</columns>
+								<rows>
+									<row>
+										<label value="Pesquisar por Nome:" />
+										<textbox id="PesquisaParametros" cols="35"/>
+										<button id="PesquisaSubmit" label="Pesquisar" />
+									</row>
+								</rows>
+							</grid>
+							<groupbox>
+								<listbox id="lsbPesqSecao" rows="6">
+									<listhead>
+										<listheader label="Id" sort="auto"  />
+										<listheader label="Nome" sort="auto"/>
+										<listheader label="Matricula" sort="auto"/>
+										<listheader label="Senha" sort="auto" />
+										<listheader label="Permissao" sort="auto"/>
+										<listheader label="Tipo Pessoa" sort="auto" />
+									</listhead>
+								</listbox>
+							</groupbox>
+							<groupbox>
+								<div align="center">
+									<button id="PesquisaLimpar" label="Limpar" />
+									<button id="PesquisaCarregar" label="Carregar Dados" />
+								</div>
+							</groupbox>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</window>
+		</div>
+	</vbox>
+</zk>

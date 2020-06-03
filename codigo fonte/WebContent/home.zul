@@ -1,0 +1,42 @@
+<?page title="home"?>
+<zk>
+
+<style src="./style.css"/>
+
+   <div id="container" sclass="vertical" apply="org.zkoss.bind.BindComposer"
+         viewModel="@id('vm') @init('br.com.LeonardoFreitas.Controllers.ControllerMenuBar')">
+        <navbar id="navbar" orient="vertical" collapsed="false"
+                onSelect="@command('navigatePage', target=self.selectedItem.attributes['navigationPage'])">
+           
+           <nav label="Usuarios" iconSclass="z-icon-user" badgeText="2"
+                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                
+			<nav label="Academico" iconSclass="z-icon-clipboard" badgeText="2"
+                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+           
+           <nav label="Turmas" iconSclass="z-icon-group" badgeText="2"
+                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                
+           <nav label="Disciplinas" iconSclass="z-icon-book" badgeText="2"
+                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                
+           <nav label="Frequencias" iconSclass="z-icon-check" badgeText="2"
+                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                
+           <nav label="Relatorios" iconSclass="z-icon-clipboard" badgeText="2"
+                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                
+           <nav label="Linguas" iconSclass="z-icon-clipboard" badgeText="2"
+                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                
+            <template name="navitem" var="navigationPage">
+                <navitem label="@load(navigationPage.subTitulo)" selected="@load(navigationPage.selected)"/>
+            </template>
+        </navbar>
+        
+        
+        <include id="contentInclude" mode="instant" sclass="content"
+                 currentPage="@ref(vm.paginaAtual)" 
+                 src="@load(currentPage.url)" />
+    </div>
+</zk>

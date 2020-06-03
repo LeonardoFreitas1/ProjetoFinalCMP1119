@@ -1,0 +1,76 @@
+<?page title="Usuario" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vbox height="100%" width="100%" pack="center" align="center">
+	    <div height="100%" width="1000px" align="center">
+			<window id="Secao" title="Cadastro de Disciplinas" width="100%" apply="br.com.LeonardoFreitas.Controllers.ControllerMenuDisciplina">
+					<tabbox>
+					<tabs>
+						<tab label="Cadastro" id="tabMcs"/>
+						<tab label="Pesquisar" id="tabPs"/>
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<grid sclass="myGridWithNoBorder" id="dataGrid" height="200px">
+					            <columns>
+					                <column width="150px"/>
+					                <column width="*"/>
+					            </columns>
+					            <rows id="colunas">
+					            	<row>
+					            		Id: <textbox id="CadastroId" disabled="true" width="80%"/>
+					            	</row>
+					            	<row>
+					            		Nome: <textbox id="CadastroNome" placeholder="Nome"  width="80%"/>
+					            	</row>
+					            	<row>
+					            		Codigo: <textbox id="CadastroCodigo" placeholder="Código"  width="80%"/>
+					            	</row>
+					            </rows>
+					        </grid>			
+							<groupbox>
+								<div align="center">
+								<button id="CadastroSubmit" label="Incluir"/>
+								<button id="CadastroAlterar" label="Alterar"/>
+								<button id="CadastroExcluir" label="Excluir"/>
+								<button id="CadastroLimpar" label="Limpar"/>
+								</div>
+							</groupbox>
+						</tabpanel>
+						
+						<tabpanel>
+						
+							<grid>
+								<columns>
+									<column label="" width="200px"/>
+									<column label="" />
+								</columns>
+								<rows>
+									<row>
+										<label value="Pesquisar por Nome:" />
+										<textbox id="PesquisaParametros" cols="35"/>
+										<button id="PesquisaSubmit" label="Pesquisar" />
+									</row>
+								</rows>
+							</grid>
+							<groupbox>
+								<listbox id="lsbPesqSecao" rows="6">
+									<listhead>
+										<listheader label="Id" sort="auto"  />
+										<listheader label="Nome" sort="auto"/>
+										<listheader label="Codigo" sort="auto"/>
+									</listhead>
+								</listbox>
+							</groupbox>
+							<groupbox>
+								<div align="center">
+									<button id="PesquisaLimpar" label="Limpar" />
+									<button id="PesquisaCarregar" label="Carregar Dados" />
+								</div>
+							</groupbox>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</window>
+		</div>
+	</vbox>
+</zk>

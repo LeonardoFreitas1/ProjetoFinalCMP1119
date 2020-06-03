@@ -1,0 +1,22 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+    <groupbox closable="false" sclass="z-demo-config">
+        <radiogroup id="rg">
+            <attribute name="onCheck"><![CDATA[
+                String localeValue = self.getSelectedItem().getValue();
+                Locale prefer_locale = localeValue.length() > 2 ? 
+                        new Locale(localeValue.substring(0,2),localeValue.substring(3)) : new Locale(localeValue);
+                session.setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, prefer_locale);
+                session.setAttribute("Demo_Locale", self.getSelectedIndex());
+                execution.sendRedirect("");
+            ]]></attribute>	
+            <vlayout>
+                <radio label="Portuguese" value="pt"
+                    checked="${c:getCurrentLocale() == self.value || c:getCurrentLocale() == 'pt_BR' }" />
+                    
+                    <radio label="English" value="en"
+                    checked="${c:getCurrentLocale() == self.value || c:getCurrentLocale() == 'en_US' || c:getCurrentLocale() == 'en_GB' }" />
+            </vlayout>
+        </radiogroup>
+    </groupbox>
+</zk>
