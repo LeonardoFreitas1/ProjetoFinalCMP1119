@@ -1,10 +1,18 @@
 package br.com.LeonardoFreitas.Controllers;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.zkoss.zul.South;
+
+import br.com.LeonardoFreitas.DAO.DisciplinaDAO;
 import br.com.LeonardoFreitas.DAO.TurmaDAO;
+import br.com.LeonardoFreitas.DAO.UsuarioTurmaDAO;
+import br.com.LeonardoFreitas.Modelo.Disciplina;
 import br.com.LeonardoFreitas.Modelo.Turma;
+import br.com.LeonardoFreitas.Modelo.Usuario;
+import br.com.LeonardoFreitas.Modelo.UsuarioTurma;
 
 public class ControllerTurma {
 	
@@ -22,14 +30,87 @@ public class ControllerTurma {
 		return lista;
 	}
 	
-	public boolean create(String nome_turma, int disciplina) throws SQLException, ClassNotFoundException{
+	public List<Turma> getByCode(String codigoTurma) throws SQLException, ClassNotFoundException{
+		
+		TurmaDAO TurmaDAO = new TurmaDAO();
+		List<Turma> lista = null;
+		try {
+			
+			 lista = TurmaDAO.getTurmasCodigo(codigoTurma);
+			
+		}catch(SQLException e) {
+			throw e;
+		}
+		return lista;
+	}
+	
+	public List<Turma> getUsersByCode(String codigoTurma) throws SQLException, ClassNotFoundException{
+		
+		TurmaDAO TurmaDAO = new TurmaDAO();
+		List<Turma> lista = null;
+		
+		try {
+			
+			 lista = TurmaDAO.getUsuariosCodigoTurma(codigoTurma);
+			
+		}catch(SQLException e) {
+			throw e;
+		}
+		return lista;
+	}
+	
+	public List<Turma> getByUser(String nome) throws SQLException, ClassNotFoundException{
+		
+		TurmaDAO TurmaDAO = new TurmaDAO();
+		UsuarioTurmaDAO usuarioDAO = new UsuarioTurmaDAO();
+		ControllerUsuario controllerUsuario = new ControllerUsuario();
+		
+		List<Turma> lista = new ArrayList<>();
+		
+		try {
+			 List<Usuario> usuarios = controllerUsuario.getAlunoByName(nome);
+			 
+			 for(Usuario usuario: usuarios) {
+				 
+				 List<UsuarioTurma> list = usuarioDAO.getUsuarioTurmaIdUsuario(usuario.getId_usuario());
+				 
+				 for(UsuarioTurma usuarioTurma: list) {
+					 
+					 lista.add(TurmaDAO.getTurmaId(usuarioTurma.getId_turma()));
+					 
+				 }
+			 }
+		}catch(SQLException e) {
+			throw e;
+		}
+		return lista;
+	}
+	
+	public List<Turma> getByDisciplina(String nomeDisciplina) throws SQLException, ClassNotFoundException{
+		
+		TurmaDAO TurmaDAO = new TurmaDAO();
+		ControllerDisciplina controllerDisciplina = new ControllerDisciplina();
+		
+		List<Turma> lista = new ArrayList<>();
+		
+		try {
+			 Disciplina disciplina = controllerDisciplina.getByName(nomeDisciplina);
+			 lista = TurmaDAO.getTurmasDisciplina(disciplina.getId_disciplina());
+			 
+		}catch(SQLException e) {
+			throw e;
+		}
+		return lista;
+	}
+	
+	public boolean create(int id_turma, String codigo_turma, int disciplina, List<Integer> usuarios) throws SQLException, ClassNotFoundException{
 		
 		TurmaDAO TurmaDAO = new TurmaDAO();
 		boolean completo = false;
 		
 		try {
 			
-			completo = TurmaDAO.CreateTurma(nome_turma, disciplina);
+			completo = TurmaDAO.CreateTurma(id_turma, codigo_turma, disciplina, usuarios);
 			
 		}catch(SQLException e) {
 			throw e;
@@ -37,14 +118,14 @@ public class ControllerTurma {
 		return completo;
 	}
 	
-	public boolean update(int id, String nome_turma, int disciplina) throws SQLException, ClassNotFoundException{
+	public boolean update(int id, String codigo_turma, int disciplina) throws SQLException, ClassNotFoundException{
 		
 		TurmaDAO TurmaDAO = new TurmaDAO();
 		boolean completo = false;
 		
 		try {
 
-			completo = TurmaDAO.UpdateTurma(id, nome_turma, disciplina);
+			completo = TurmaDAO.UpdateTurma(id, codigo_turma, disciplina);
 
 		}catch(SQLException e) {
 			throw e;

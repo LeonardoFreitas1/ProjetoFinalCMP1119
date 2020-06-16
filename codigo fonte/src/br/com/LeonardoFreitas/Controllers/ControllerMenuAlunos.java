@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -27,27 +29,49 @@ public class ControllerMenuAlunos extends SelectorComposer<Component>{
 	@Wire
 	Listbox lsbPesqSecao;
 	
+	@Override
+    public void doAfterCompose(Component comp) throws Exception {
+        super.doAfterCompose(comp);
+        try {
+			//Verifica se Usuário está logado
+			int id_usuario = (int) Sessions.getCurrent().getAttribute("id");
+			
+		}catch(NullPointerException e) {
+			//Usuário não logado
+			//Redicionar para login
+			//Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
+		}
+    }
+	
 	@Listen("onClick=#CadastroSubmit")
 	public void adicionarUsuario() throws WrongValueException, ClassNotFoundException {
 		
-		ControllerUsuario controller = new ControllerUsuario();
+		int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+		int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 		
-		int permissao = CadastroPermissao.getSelectedItem().getIndex() + 1;
-		int tipo_pessoa = 2;
+		if(tipo_usuario == 1 && permissao_usuario == 1) {
 		
-		try {
+			ControllerUsuario controller = new ControllerUsuario();
 			
-			boolean resp = controller.create(CadastroNome.getValue(), CadastroSenha.getValue(), CadastroMatricula.getValue(), tipo_pessoa, permissao);
+			int permissao = CadastroPermissao.getSelectedItem().getIndex() + 1;
+			int tipo_pessoa = 2;
 			
-			if(resp)
-				Messagebox.show("Usuário Adicionado!");
-			else
-				Messagebox.show("Usuário não adicionado!");
+			try {
+				
+				boolean resp = controller.create(CadastroNome.getValue(), CadastroSenha.getValue(), CadastroMatricula.getValue(), tipo_pessoa, permissao);
+				
+				if(resp)
+					Messagebox.show("Usuário Adicionado!");
+				else
+					Messagebox.show("Usuário não adicionado!");
+				
+				this.LimparDadosForm();
 			
-			this.LimparDadosForm();
-		
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+			}catch(SQLException e) {
+				Messagebox.show(String.valueOf(e));
+			}
+		}else {
+			Messagebox.show("Você não tem permissao para adicionar um usuário!");
 		}
 		
 	}
@@ -63,7 +87,7 @@ public class ControllerMenuAlunos extends SelectorComposer<Component>{
 		
 		try {
 			
-			List<Usuario> lista = controller.getAlunoByName(nomeUsuario);
+			List<Usuario> lista = controller.getAlunosByName(nomeUsuario);
 			
 			for(Usuario usuario: lista) {
 				
@@ -122,53 +146,67 @@ public class ControllerMenuAlunos extends SelectorComposer<Component>{
 	@Listen("onClick=#CadastroAlterar")
 	public void ExcluirUsuario() throws ClassNotFoundException {
 		
-		ControllerUsuario controller = new ControllerUsuario();
+		int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+		int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 		
-		int id = Integer.parseInt(CadastroId.getText());
-		String nome = CadastroNome.getText();
-		String matricula = CadastroMatricula.getText();
-		String senha = CadastroSenha.getText();
-		int tipo_pessoa = CadastroTipo.getSelectedIndex() + 1;
-		int permissoes = CadastroPermissao.getSelectedIndex() + 1;
+		if(tipo_usuario == 1 && permissao_usuario == 1) {
 		
-		
-		try {
-			boolean result = controller.update(id, nome, senha, matricula, tipo_pessoa, permissoes);
+			ControllerUsuario controller = new ControllerUsuario();
 			
-			if(result)
-				Messagebox.show("Usuario alterado com sucesso!");
-			else
-				Messagebox.show("Não foi possivel alterar o Usuario!");
+			int id = Integer.parseInt(CadastroId.getText());
+			String nome = CadastroNome.getText();
+			String matricula = CadastroMatricula.getText();
+			String senha = CadastroSenha.getText();
+			int tipo_pessoa = CadastroTipo.getSelectedIndex() + 1;
+			int permissoes = CadastroPermissao.getSelectedIndex() + 1;
 			
-			this.LimparDadosForm();
-			this.LimparDadosLista();
 			
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+			try {
+				boolean result = controller.update(id, nome, senha, matricula, tipo_pessoa, permissoes);
+				
+				if(result)
+					Messagebox.show("Usuario alterado com sucesso!");
+				else
+					Messagebox.show("Não foi possivel alterar o Usuario!");
+				
+				this.LimparDadosForm();
+				this.LimparDadosLista();
+				
+			}catch(SQLException e) {
+				Messagebox.show(String.valueOf(e));
+			}
+		}else {
+			Messagebox.show("Você não tem permissao para alterar o usuario");
 		}
 		
 	}
 	@Listen("onClick=#CadastroExcluir")
 	public void LimparFormulario() throws ClassNotFoundException {
 		
-		ControllerUsuario controller = new ControllerUsuario();
+		int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+		int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 		
-		int id = Integer.parseInt(CadastroId.getText());
-		
-		try {
-		boolean result = controller.delete(id);
+		if(tipo_usuario == 1 && permissao_usuario == 1) {
+			ControllerUsuario controller = new ControllerUsuario();
 			
-			if(result)
-				Messagebox.show("Usuario Deletado com sucesso!");
-			else
-				Messagebox.show("Não foi possivel deletar o Usuario!");
+			int id = Integer.parseInt(CadastroId.getText());
 			
-			this.LimparDadosForm();
-			this.LimparDadosLista();
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+			try {
+			boolean result = controller.delete(id);
+				
+				if(result)
+					Messagebox.show("Usuario Deletado com sucesso!");
+				else
+					Messagebox.show("Não foi possivel deletar o Usuario!");
+				
+				this.LimparDadosForm();
+				this.LimparDadosLista();
+			}catch(SQLException e) {
+				Messagebox.show(String.valueOf(e));
+			}
+		}else {
+			Messagebox.show("Você não tem permissao para excluir o usuario");
 		}
-		
 	}
 	
 	@Listen("onClick=#CadastroLimpar")
@@ -178,7 +216,7 @@ public class ControllerMenuAlunos extends SelectorComposer<Component>{
 		
 	}
 	
-	@Listen("onClick=#PesquisaCarregar")
+	@Listen("onClick=#lsbPesqSecao")
 	public void CarregarDados() {
 		
 		Listitem indice = lsbPesqSecao.getSelectedItem();

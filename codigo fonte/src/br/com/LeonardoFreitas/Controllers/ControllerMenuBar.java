@@ -47,10 +47,9 @@ public class ControllerMenuBar {
         addMenu("Usuarios", "Professor", "Professor.zul");
         addMenu("Academico", "Disciplina", "Disciplina.zul");
         addMenu("Academico", "Turmas", "Turma.zul");
-        addMenu("Disciplinas", "Adicionar Disciplina", "Cadastros/cadastroDisciplina.zul");
-        addMenu("Turmas", "Adicionar Turma", "Cadastros/cadastroTurma.zul");
-        addMenu("Linguas", "Selecionar Lingua", "internacionalizacao.zul");
-        
+        addMenu("Academico", "Frequencias", "Frequencia.zul");
+        addMenu("Relatorios", "Relatorio simples", "RelatorioSimples.zul");
+        addMenu("Relatorios", "Relatorio complexo", "RelatorioComplexo.zul");
         
     }
     //Adicionar Menu sem valor imbutido

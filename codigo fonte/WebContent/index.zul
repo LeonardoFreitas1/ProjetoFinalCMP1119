@@ -19,7 +19,7 @@ margin-left: 10%;
 
 <vbox height="100%" width="100%" pack="center" align="center">
 	    <div height="100%" width="100%" align="center">
-	    <window title="Login Usuario" border="none" width="60%" apply="br.com.LeonardoFreitas.Controllers.ControllerLogin">
+	    <window title="Login Usuario" border="none" width="60%" apply="br.com.LeonardoFreitas.Controllers.ControllerMenuLogin">
 	        <grid sclass="myGridWithNoBorder" id="dataGrid" height="300px">
 	            <columns>
 	                <column width="150px"/>

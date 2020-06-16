@@ -1,4 +1,4 @@
-package br.com.LeonardoFreitas.Controllers;
+ 	package br.com.LeonardoFreitas.Controllers;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -57,7 +57,7 @@ public class ControllerMenuDisciplina extends SelectorComposer<Component>{
 		
 		try {
 			
-			List<Disciplina> lista = controller.getByName(nomeDisiciplina);
+			List<Disciplina> lista = controller.getListByName(nomeDisiciplina);
 			
 			for(Disciplina disciplina: lista) {
 				
@@ -152,7 +152,7 @@ public class ControllerMenuDisciplina extends SelectorComposer<Component>{
 		
 	}
 	
-	@Listen("onClick=#PesquisaCarregar")
+	@Listen("onClick=#lsbPesqSecao")
 	public void CarregarDados() {
 		
 		Listitem indice = lsbPesqSecao.getSelectedItem();

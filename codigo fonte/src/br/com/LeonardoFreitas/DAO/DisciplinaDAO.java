@@ -38,10 +38,10 @@ public class DisciplinaDAO extends Conexao{
 			
 		}
 	
-	public List<Disciplina> getDisciplinaNome(String nome) throws ClassNotFoundException, SQLException {
+	public Disciplina getDisciplinaNome(String nome) throws ClassNotFoundException, SQLException {
 		
 		PreparedStatement pstmt = null;
-		List<Disciplina> lista = new ArrayList<>();
+		Disciplina disciplina = null;
 		try {
 		
 			Connection conn = this.getConnection();
@@ -57,15 +57,43 @@ public class DisciplinaDAO extends Conexao{
 				String nomeQuery = rs.getString("nome_disciplina");
 				String codigo = rs.getString("codigo_disciplina");
 				
-				lista.add(new Disciplina(id, nomeQuery, codigo));
-				
+				disciplina = new Disciplina(id, nomeQuery, codigo);
 				
 			}
 			
 		}catch(SQLException e) {
 			throw e;
 		}
-		return lista;
+		return disciplina;
+	}
+	
+public List<Disciplina> getListaDisciplinaNome(String nome) throws ClassNotFoundException, SQLException {
+		
+		PreparedStatement pstmt = null;
+		List<Disciplina> disciplinas = new ArrayList<>();
+		try {
+		
+			Connection conn = this.getConnection();
+			pstmt = conn.prepareStatement("SELECT * FROM disciplinas where nome_disciplina LIKE ?");
+			
+			pstmt.setString(1, nome + "%");
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				int id = rs.getInt("id_disciplina");
+				String nomeQuery = rs.getString("nome_disciplina");
+				String codigo = rs.getString("codigo_disciplina");
+				
+				disciplinas.add(new Disciplina(id, nomeQuery, codigo));
+				
+			}
+			
+		}catch(SQLException e) {
+			throw e;
+		}
+		return disciplinas;
 	}
 	
 	public Disciplina getDisciplinaId(int id_disciplina) throws SQLException, ClassNotFoundException {

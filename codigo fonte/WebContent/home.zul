@@ -14,19 +14,8 @@
 			<nav label="Academico" iconSclass="z-icon-clipboard" badgeText="2"
                 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
            
-           <nav label="Turmas" iconSclass="z-icon-group" badgeText="2"
-                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
-                
-           <nav label="Disciplinas" iconSclass="z-icon-book" badgeText="2"
-                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
-                
-           <nav label="Frequencias" iconSclass="z-icon-check" badgeText="2"
-                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
-                
+          
            <nav label="Relatorios" iconSclass="z-icon-clipboard" badgeText="2"
-                children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
-                
-           <nav label="Linguas" iconSclass="z-icon-clipboard" badgeText="2"
                 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
                 
             <template name="navitem" var="navigationPage">

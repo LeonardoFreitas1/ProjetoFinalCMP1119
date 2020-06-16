@@ -37,20 +37,35 @@ public class ControllerDisciplina {
 		return disciplina;
 		
 	}	
-	
-	public List<Disciplina> getByName(String nome) throws SQLException, ClassNotFoundException {
+	public List<Disciplina> getListByName(String nome) throws SQLException, ClassNotFoundException {
 		
 		DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
-		List<Disciplina> lista = null;
+		List<Disciplina> disciplinas = null;
 		
 		try {
-			lista = disciplinaDAO.getDisciplinaNome(nome);
+			disciplinas = disciplinaDAO.getListaDisciplinaNome(nome);
 			
 		}catch(SQLException e){
 			throw e;
 		}
 		
-		return lista;
+		return disciplinas;
+		
+	}
+	
+	public Disciplina getByName(String nome) throws SQLException, ClassNotFoundException {
+		
+		DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+		Disciplina disciplina = null;
+		
+		try {
+			disciplina = disciplinaDAO.getDisciplinaNome(nome);
+			
+		}catch(SQLException e){
+			throw e;
+		}
+		
+		return disciplina;
 		
 	}
 	

@@ -8,7 +8,7 @@ import br.com.LeonardoFreitas.Modelo.Usuario;
 
 public class ControllerUsuario {
 	
-public List<Usuario> getAll() throws SQLException, ClassNotFoundException{
+	public List<Usuario> getAll() throws SQLException, ClassNotFoundException{
 		
 		UsuarioDAO UsuarioDAO = new UsuarioDAO();
 		List<Usuario> lista = null;
@@ -21,6 +21,47 @@ public List<Usuario> getAll() throws SQLException, ClassNotFoundException{
 		}
 		return lista;
 	}
+	
+public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNotFoundException{
+		
+		UsuarioDAO UsuarioDAO = new UsuarioDAO();
+		List<Usuario> lista = null;
+		try {
+			
+			 lista = UsuarioDAO.getUsuariosCadastrados(id_turma);
+			
+		}catch(SQLException e) {
+			throw e;
+		}
+		return lista;
+	}
+	
+	public List<Usuario> getAllAluno() throws SQLException, ClassNotFoundException{
+		
+		UsuarioDAO UsuarioDAO = new UsuarioDAO();
+		List<Usuario> lista = null;
+		try {
+			
+			 lista = UsuarioDAO.getAllAlunos();
+			
+		}catch(SQLException e) {
+			throw e;
+		}
+		return lista;
+	}
+	public List<Usuario> getAllProfessor() throws SQLException, ClassNotFoundException{
+	
+	UsuarioDAO UsuarioDAO = new UsuarioDAO();
+	List<Usuario> lista = null;
+	try {
+		
+		 lista = UsuarioDAO.getAllProfessor();
+		
+	}catch(SQLException e) {
+		throw e;
+	}
+	return lista;
+}
 	
 	public boolean create(String nome, String senha, String matricula, int tipo_pessoa, int permissoes) throws SQLException, ClassNotFoundException{
 		
@@ -71,14 +112,14 @@ public List<Usuario> getAll() throws SQLException, ClassNotFoundException{
 		
 	}
 	
-	public List<Usuario> getAlunoByName(String nome) throws SQLException, ClassNotFoundException {
+	public List<Usuario> getAlunosByName(String nome) throws SQLException, ClassNotFoundException {
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		List<Usuario> lista = null;
 		
 		try {
 			
-			lista = usuarioDAO.getAlunoNome(nome);
+			lista = usuarioDAO.getAlunosNome(nome);
 			
 		}catch(SQLException e) {
 			throw e;
@@ -88,7 +129,24 @@ public List<Usuario> getAll() throws SQLException, ClassNotFoundException{
 		
 	}
 	
-public List<Usuario> getProfessorByName(String nome) throws SQLException, ClassNotFoundException {
+	public List<Usuario> getAlunoByName(String nome) throws SQLException, ClassNotFoundException {
+		
+		UsuarioDAO usuarioDAO = new UsuarioDAO();
+		List<Usuario> usuarios = null;
+		
+		try {
+			
+			usuarios = usuarioDAO.getAlunoNome(nome);
+			
+		}catch(SQLException e) {
+			throw e;
+		}
+		
+		return usuarios;
+		
+	}
+	
+	public List<Usuario> getProfessorByName(String nome) throws SQLException, ClassNotFoundException {
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		List<Usuario> lista = null;

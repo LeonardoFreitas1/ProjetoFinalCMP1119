@@ -7,6 +7,8 @@
 					<tabs>
 						<tab label="Cadastro" id="tabMcs"/>
 						<tab label="Pesquisar" id="tabPs"/>
+						<tab label="Usuarios em Turmas" id="tabUsr"/>
+						
 					</tabs>
 					<tabpanels>
 						<tabpanel>
@@ -29,7 +31,7 @@
 				        </grid>	
 							<groupbox>
 								<div align="center">
-								<button id="CadastroSubmit" label="Incluir"/>
+								<button id="CadastroSubmit" label="Incluir Turma"/>
 								<button id="CadastroAlterar" label="Alterar"/>
 								<button id="CadastroExcluir" label="Excluir"/>
 								<button id="CadastroLimpar" label="Limpar"/>
@@ -46,8 +48,13 @@
 								</columns>
 								<rows>
 									<row>
-										<label value="Pesquisar por Nome:" />
-										<textbox id="PesquisaParametros" cols="35"/>
+									<combobox id="PesquisaTipo" text="Codigo">
+		    								<comboitem label="Codigo"/>
+		    								<comboitem label="Nome Aluno"/>
+		    								<comboitem label="Nome Disciplina"/>
+										</combobox>
+										<label value="Pesquisar:" />
+										<textbox id="PesquisaParametros"/>
 										<button id="PesquisaSubmit" label="Pesquisar" />
 									</row>
 								</rows>
@@ -56,17 +63,60 @@
 								<listbox id="lsbPesqSecao" rows="6">
 									<listhead>
 										<listheader label="Id" sort="auto"  />
-										<listheader label="Nome" sort="auto"/>
-										<listheader label="Codigo" sort="auto"/>
+										<listheader label="Codigo Turma" sort="auto"/>
+										<listheader label="Usuario" sort="auto"/>
+										<listheader label="Tipo Usuario" sort="auto"/>
 									</listhead>
 								</listbox>
 							</groupbox>
 							<groupbox>
 								<div align="center">
 									<button id="PesquisaLimpar" label="Limpar" />
-									<button id="PesquisaCarregar" label="Carregar Dados" />
 								</div>
 							</groupbox>
+						</tabpanel>
+						<tabpanel>
+
+							
+							<div viewModel="@id('vm') @init('br.com.LeonardoFreitas.Controllers.ControllerMenuTurma')">
+
+							    <columnlayout height="350px">
+							        <columnchildren width="50%">
+							            <panel title="Alunos não cadastrados:" border="normal" height="100%">
+							                <panelchildren>
+							                    <listbox id="left" height="100%" oddRowSclass=" " checkmark="true"
+							                             model="@init(vm.leftListModel)">
+							                        <template name="model">
+							                            <listitem label="@load(each.nome)" />
+							                        </template>
+							                    </listbox>
+							                </panelchildren>
+							            </panel>
+							        </columnchildren>
+							        <columnchildren width="100px">
+							            <vlayout style="text-align: center; margin-top: 70px;" spacing="15px">
+							                <button iconSclass="z-icon-arrow-right" tooltiptext="Add Project(s)"
+							                        onClick="@command('addProjects')"/>
+							                <button iconSclass="z-icon-arrow-left" tooltiptext="Remove Project(s)"
+							                        onClick="@command('removeProjects')"/>
+							                           
+							            </vlayout>
+							        </columnchildren>
+							        <columnchildren width="50%">
+							            <panel title="Alunos Cadastrados:" border="normal" height="100%">
+							                <panelchildren>
+							                    <listbox id="right" height="100%" oddRowSclass=" " checkmark="true"
+							                             model="@init(vm.rightListModel)">
+							                        <template name="model">
+							                            <listitem label="@load(each.nome)" />
+							                        </template>
+							                    </listbox>            
+							                </panelchildren>
+							            </panel>
+							        </columnchildren>
+							    </columnlayout>
+							
+							</div>
 						</tabpanel>
 					</tabpanels>
 				</tabbox>

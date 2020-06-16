@@ -178,7 +178,7 @@ public class ControllerMenuProfessor extends SelectorComposer<Component>{
 		
 	}
 	
-	@Listen("onClick=#PesquisaCarregar")
+	@Listen("onClick=#lsbPesqSecao")
 	public void CarregarDados() {
 		
 		Listitem indice = lsbPesqSecao.getSelectedItem();

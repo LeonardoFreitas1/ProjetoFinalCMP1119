@@ -27,13 +27,18 @@ public class ControllerMenuLogin extends SelectorComposer<Component>{
 			
 			Usuario usuario = controller.getByMatricula(matricula.getValue());
 			
+			
+			
 			if(usuario.getSenha().equals(senha.getValue())) {
 				
-				//Armazenar tipo ao Session Storage
-				Sessions.getCurrent().setAttribute("tipo", usuario.getPermissoes());
+				//Armazenar permissao ao Session Storage
+				Sessions.getCurrent().setAttribute("permissao", usuario.getPermissoes());
 				
 				//Armazenar id ao Session Storage
 				Sessions.getCurrent().setAttribute("id", usuario.getId_usuario());
+				
+				//Armazenar tipo ao Session Storage
+				Sessions.getCurrent().setAttribute("tipo", usuario.getTipo_pessoa());
 				
 				//Redirecionar para pagina principal
 				Executions.sendRedirect("http://localhost:8080/ProjetoFinal/home.zul");
