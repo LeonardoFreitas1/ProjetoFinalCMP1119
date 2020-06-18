@@ -1,5 +1,13 @@
 package br.com.LeonardoFreitas.Modelo;
 
+/*
+ * Classe Disciplina
+ * 
+ * Esta classe será responsável por armazenar
+ * de forma estruturada a tabela disciplinas do banco
+ * 
+ * */
+
 public class Disciplina {
 
 	private int id_disciplina;

@@ -2,7 +2,6 @@ package br.com.LeonardoFreitas.Controllers;
 
 import java.sql.SQLException;
 import java.util.List;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
@@ -33,45 +32,54 @@ public class ControllerMenuAlunos extends SelectorComposer<Component>{
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         try {
-			//Verifica se Usuário está logado
+        	
+        	//Verifica se Usuário está logado
+        	
+			@SuppressWarnings("unused")
 			int id_usuario = (int) Sessions.getCurrent().getAttribute("id");
 			
 		}catch(NullPointerException e) {
-			//Usuário não logado
+			
 			//Redicionar para login
-			//Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
     }
 	
 	@Listen("onClick=#CadastroSubmit")
 	public void adicionarUsuario() throws WrongValueException, ClassNotFoundException {
 		
-		int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
-		int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
-		
-		if(tipo_usuario == 1 && permissao_usuario == 1) {
-		
-			ControllerUsuario controller = new ControllerUsuario();
+		try {
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 			
-			int permissao = CadastroPermissao.getSelectedItem().getIndex() + 1;
-			int tipo_pessoa = 2;
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
 			
-			try {
+				ControllerUsuario controller = new ControllerUsuario();
 				
-				boolean resp = controller.create(CadastroNome.getValue(), CadastroSenha.getValue(), CadastroMatricula.getValue(), tipo_pessoa, permissao);
+				int permissao = CadastroPermissao.getSelectedItem().getIndex() + 1;
+				int tipo_pessoa = 2;
 				
-				if(resp)
-					Messagebox.show("Usuário Adicionado!");
-				else
-					Messagebox.show("Usuário não adicionado!");
+				try {
+					
+					boolean resp = controller.create(CadastroNome.getValue(), CadastroSenha.getValue(), CadastroMatricula.getValue(), tipo_pessoa, permissao);
+					
+					if(resp)
+						Messagebox.show("Usuário Adicionado!");
+					else
+						Messagebox.show("Usuário não adicionado!");
+					
+					this.LimparDadosForm();
 				
-				this.LimparDadosForm();
-			
-			}catch(SQLException e) {
-				Messagebox.show(String.valueOf(e));
+				}catch(SQLException e) {
+					Messagebox.show(String.valueOf(e));
+				}
+			}else {
+				Messagebox.show("Você não tem permissao para adicionar um usuário!");
 			}
-		}else {
-			Messagebox.show("Você não tem permissao para adicionar um usuário!");
+		}catch(NullPointerException e) {
+			
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
+			
 		}
 		
 	}
@@ -79,61 +87,75 @@ public class ControllerMenuAlunos extends SelectorComposer<Component>{
 	@Listen("onClick=#PesquisaSubmit")
 	public void ListarUsuarios() throws ClassNotFoundException {
 		
-		lsbPesqSecao.getItems().clear();
-		
-		String nomeUsuario = PesquisaParametros.getText();
-
-		ControllerUsuario controller = new ControllerUsuario();
-		
 		try {
 			
-			List<Usuario> lista = controller.getAlunosByName(nomeUsuario);
-			
-			for(Usuario usuario: lista) {
-				
-			Listcell id = new Listcell();
-			Listcell nome = new Listcell();
-			Listcell matricula = new Listcell();
-			Listcell senha = new Listcell();
-			Listcell tipo = new Listcell();
-			Listcell permissao = new Listcell();
-			
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
 		
+			lsbPesqSecao.getItems().clear();
 			
-			id.setAttribute("id", String.valueOf(usuario.getId_usuario()));
-			id.setLabel(String.valueOf(usuario.getId_usuario()));
+			String nomeUsuario = PesquisaParametros.getText();
+	
+			ControllerUsuario controller = new ControllerUsuario();
 			
-			nome.setAttribute("nome", String.valueOf(usuario.getNome()));
-			nome.setLabel(String.valueOf(usuario.getNome()));
-			
-			matricula.setAttribute("matricula", String.valueOf(usuario.getMatricula()));
-			matricula.setLabel(String.valueOf(usuario.getMatricula()));
-			
-			senha.setAttribute("senha", String.valueOf(usuario.getSenha()));
-			senha.setLabel(String.valueOf(usuario.getSenha()));
-			
-			permissao.setAttribute("permissao", String.valueOf(usuario.getPermissoes()));
-			permissao.setLabel(String.valueOf(usuario.getPermissoes()));
-			
-			tipo.setAttribute("tipo", String.valueOf(usuario.getTipo_pessoa()));
-			tipo.setLabel(String.valueOf(usuario.getTipo_pessoa()));
-			
-			Listitem listitem = new Listitem();
-			
-			listitem.appendChild(id);
-			listitem.appendChild(nome);
-			listitem.appendChild(matricula);
-			listitem.appendChild(senha);
-			listitem.appendChild(permissao);
-			listitem.appendChild(tipo);
-			
-			
-			lsbPesqSecao.appendChild(listitem);
+			if(tipo_usuario == 1) {
+				
+				try {
+					
+					List<Usuario> lista = controller.getAlunosByName(nomeUsuario);
+					
+					for(Usuario usuario: lista) {
+						
+					Listcell id = new Listcell();
+					Listcell nome = new Listcell();
+					Listcell matricula = new Listcell();
+					Listcell senha = new Listcell();
+					Listcell tipo = new Listcell();
+					Listcell permissao = new Listcell();
+					
+				
+					
+					id.setAttribute("id", String.valueOf(usuario.getId_usuario()));
+					id.setLabel(String.valueOf(usuario.getId_usuario()));
+					
+					nome.setAttribute("nome", String.valueOf(usuario.getNome()));
+					nome.setLabel(String.valueOf(usuario.getNome()));
+					
+					matricula.setAttribute("matricula", String.valueOf(usuario.getMatricula()));
+					matricula.setLabel(String.valueOf(usuario.getMatricula()));
+					
+					senha.setAttribute("senha", String.valueOf(usuario.getSenha()));
+					senha.setLabel(String.valueOf(usuario.getSenha()));
+					
+					permissao.setAttribute("permissao", String.valueOf(usuario.getPermissoes()));
+					permissao.setLabel(String.valueOf(usuario.getPermissoes()));
+					
+					tipo.setAttribute("tipo", String.valueOf(usuario.getTipo_pessoa()));
+					tipo.setLabel(String.valueOf(usuario.getTipo_pessoa()));
+					
+					Listitem listitem = new Listitem();
+					
+					listitem.appendChild(id);
+					listitem.appendChild(nome);
+					listitem.appendChild(matricula);
+					listitem.appendChild(senha);
+					listitem.appendChild(permissao);
+					listitem.appendChild(tipo);
+					
+					
+					lsbPesqSecao.appendChild(listitem);
+					}
+					LimparDadosLista();
+					
+				}catch(SQLException e) {
+					Messagebox.show(String.valueOf(e));
+				}
+			}else {
+				Messagebox.show("Você não tem permissão para realizar buscas");
 			}
-			LimparDadosLista();
+		}catch(NullPointerException e) {
 			
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
+			
 		}
 			
 	}
@@ -146,66 +168,73 @@ public class ControllerMenuAlunos extends SelectorComposer<Component>{
 	@Listen("onClick=#CadastroAlterar")
 	public void ExcluirUsuario() throws ClassNotFoundException {
 		
-		int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
-		int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
-		
-		if(tipo_usuario == 1 && permissao_usuario == 1) {
-		
-			ControllerUsuario controller = new ControllerUsuario();
+		try {
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 			
-			int id = Integer.parseInt(CadastroId.getText());
-			String nome = CadastroNome.getText();
-			String matricula = CadastroMatricula.getText();
-			String senha = CadastroSenha.getText();
-			int tipo_pessoa = CadastroTipo.getSelectedIndex() + 1;
-			int permissoes = CadastroPermissao.getSelectedIndex() + 1;
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
 			
-			
-			try {
-				boolean result = controller.update(id, nome, senha, matricula, tipo_pessoa, permissoes);
+				ControllerUsuario controller = new ControllerUsuario();
 				
-				if(result)
-					Messagebox.show("Usuario alterado com sucesso!");
-				else
-					Messagebox.show("Não foi possivel alterar o Usuario!");
+				int id = Integer.parseInt(CadastroId.getText());
+				String nome = CadastroNome.getText();
+				String matricula = CadastroMatricula.getText();
+				String senha = CadastroSenha.getText();
+				int tipo_pessoa = CadastroTipo.getSelectedIndex() + 1;
+				int permissoes = CadastroPermissao.getSelectedIndex() + 1;
 				
-				this.LimparDadosForm();
-				this.LimparDadosLista();
 				
-			}catch(SQLException e) {
-				Messagebox.show(String.valueOf(e));
+				try {
+					boolean result = controller.update(id, nome, senha, matricula, tipo_pessoa, permissoes);
+					
+					if(result)
+						Messagebox.show("Usuario alterado com sucesso!");
+					else
+						Messagebox.show("Não foi possivel alterar o Usuario!");
+					
+					this.LimparDadosForm();
+					this.LimparDadosLista();
+					
+				}catch(SQLException e) {
+					Messagebox.show(String.valueOf(e));
+				}
+			}else {
+				Messagebox.show("Você não tem permissao para alterar o usuario");
 			}
-		}else {
-			Messagebox.show("Você não tem permissao para alterar o usuario");
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
-		
 	}
 	@Listen("onClick=#CadastroExcluir")
 	public void LimparFormulario() throws ClassNotFoundException {
 		
-		int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
-		int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
-		
-		if(tipo_usuario == 1 && permissao_usuario == 1) {
-			ControllerUsuario controller = new ControllerUsuario();
+		try {
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 			
-			int id = Integer.parseInt(CadastroId.getText());
-			
-			try {
-			boolean result = controller.delete(id);
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
+				ControllerUsuario controller = new ControllerUsuario();
 				
-				if(result)
-					Messagebox.show("Usuario Deletado com sucesso!");
-				else
-					Messagebox.show("Não foi possivel deletar o Usuario!");
+				int id = Integer.parseInt(CadastroId.getText());
 				
-				this.LimparDadosForm();
-				this.LimparDadosLista();
-			}catch(SQLException e) {
-				Messagebox.show(String.valueOf(e));
+				try {
+				boolean result = controller.delete(id);
+					
+					if(result)
+						Messagebox.show("Usuario Deletado com sucesso!");
+					else
+						Messagebox.show("Não foi possivel deletar o Usuario!");
+					
+					this.LimparDadosForm();
+					this.LimparDadosLista();
+				}catch(SQLException e) {
+					Messagebox.show("Você deve remover este aluno de suas respectivas turmas antes!"); 
+				}
+			}else {
+				Messagebox.show("Você não tem permissao para excluir o usuario");
 			}
-		}else {
-			Messagebox.show("Você não tem permissao para excluir o usuario");
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
 	}
 	
@@ -238,6 +267,7 @@ public class ControllerMenuAlunos extends SelectorComposer<Component>{
 		CadastroPermissao.setSelectedIndex(permissao);
 		CadastroTipo.setSelectedIndex(tipo);
 	}
+	
 	private void LimparDadosForm() {
 		CadastroId.setValue("");
 		CadastroMatricula.setValue("");

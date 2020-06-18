@@ -19,7 +19,7 @@
 				            </columns>
 				            <rows>
 				            	<row>
-				            		Id: <textbox id="CadastroId" width="80%"/>
+				            		Id: <textbox id="CadastroId" placeholder="Id" width="80%" disabled ="true"/>
 				            	</row>
 				            	<row>
 				            		Nome: <textbox id="CadastroNome" placeholder="Nome"  width="80%"/>
@@ -44,7 +44,7 @@
 							<grid>
 								<columns>
 									<column label="" width="200px"/>
-									<column label="" />
+									<column label="" />	
 								</columns>
 								<rows>
 									<row>
@@ -85,7 +85,7 @@
 							            <panel title="Alunos não cadastrados:" border="normal" height="100%">
 							                <panelchildren>
 							                    <listbox id="left" height="100%" oddRowSclass=" " checkmark="true"
-							                             model="@init(vm.leftListModel)">
+							                             model="@init(vm.listaEsquerda)">
 							                        <template name="model">
 							                            <listitem label="@load(each.nome)" />
 							                        </template>
@@ -95,10 +95,10 @@
 							        </columnchildren>
 							        <columnchildren width="100px">
 							            <vlayout style="text-align: center; margin-top: 70px;" spacing="15px">
-							                <button iconSclass="z-icon-arrow-right" tooltiptext="Add Project(s)"
-							                        onClick="@command('addProjects')"/>
-							                <button iconSclass="z-icon-arrow-left" tooltiptext="Remove Project(s)"
-							                        onClick="@command('removeProjects')"/>
+							                <button iconSclass="z-icon-arrow-right" tooltiptext="Add Usuario(s)"
+							                        onClick="@command('adicionarUsuarios')"/>
+							                <button iconSclass="z-icon-arrow-left" tooltiptext="Remover Usuario(s)"
+							                        onClick="@command('RemoverUsuarios')"/>
 							                           
 							            </vlayout>
 							        </columnchildren>
@@ -106,7 +106,7 @@
 							            <panel title="Alunos Cadastrados:" border="normal" height="100%">
 							                <panelchildren>
 							                    <listbox id="right" height="100%" oddRowSclass=" " checkmark="true"
-							                             model="@init(vm.rightListModel)">
+							                             model="@init(vm.listaDireita)">
 							                        <template name="model">
 							                            <listitem label="@load(each.nome)" />
 							                        </template>
@@ -115,7 +115,7 @@
 							            </panel>
 							        </columnchildren>
 							    </columnlayout>
-							
+							<button id="as" onClick="@command('load')" label="Load"/>
 							</div>
 						</tabpanel>
 					</tabpanels>

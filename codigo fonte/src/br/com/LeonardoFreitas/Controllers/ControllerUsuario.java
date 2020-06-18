@@ -6,8 +6,17 @@ import java.util.List;
 import br.com.LeonardoFreitas.DAO.UsuarioDAO;
 import br.com.LeonardoFreitas.Modelo.Usuario;
 
+/*
+ * Classe Controller Usuario
+ * 
+ * Esta classe será responsável pelas solicitações e validações
+ * entre a aplicação e a classe UsuarioDAO 
+ * 
+ * */
+
 public class ControllerUsuario {
 	
+	//Solicitar lista de todos os usuários cadastrados no banco
 	public List<Usuario> getAll() throws SQLException, ClassNotFoundException{
 		
 		UsuarioDAO UsuarioDAO = new UsuarioDAO();
@@ -22,7 +31,8 @@ public class ControllerUsuario {
 		return lista;
 	}
 	
-public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNotFoundException{
+	//Solicitar usuarios cadastrados em uma determinada turma
+	public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNotFoundException{
 		
 		UsuarioDAO UsuarioDAO = new UsuarioDAO();
 		List<Usuario> lista = null;
@@ -36,6 +46,7 @@ public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNot
 		return lista;
 	}
 	
+	//Listar todos os usuários do tipo aluno
 	public List<Usuario> getAllAluno() throws SQLException, ClassNotFoundException{
 		
 		UsuarioDAO UsuarioDAO = new UsuarioDAO();
@@ -49,20 +60,25 @@ public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNot
 		}
 		return lista;
 	}
+	
+	//Listar todos os usuários do tipo professor
 	public List<Usuario> getAllProfessor() throws SQLException, ClassNotFoundException{
 	
-	UsuarioDAO UsuarioDAO = new UsuarioDAO();
-	List<Usuario> lista = null;
-	try {
+		UsuarioDAO UsuarioDAO = new UsuarioDAO();
+		List<Usuario> lista = null;
 		
-		 lista = UsuarioDAO.getAllProfessor();
+		try {
+			
+			 lista = UsuarioDAO.getAllProfessor();
+			
+		}catch(SQLException e) {
+			throw e;
+		}
 		
-	}catch(SQLException e) {
-		throw e;
+		return lista;
 	}
-	return lista;
-}
 	
+	//Solicitar adição de um novo usuário no banco
 	public boolean create(String nome, String senha, String matricula, int tipo_pessoa, int permissoes) throws SQLException, ClassNotFoundException{
 		
 		UsuarioDAO UsuarioDAO = new UsuarioDAO();
@@ -78,6 +94,7 @@ public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNot
 		return completo;
 	}
 	
+	//Solicitar usuário baseado no id
 	public Usuario getById(int id) throws SQLException, ClassNotFoundException {
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -95,6 +112,7 @@ public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNot
 		
 	}
 	
+	//Solicitar usuário baseado na sua matricula
 	public Usuario getByMatricula(String matricula) throws SQLException, ClassNotFoundException {
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -112,6 +130,7 @@ public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNot
 		
 	}
 	
+	//Solicitar lista de usuários baseados no seu nome
 	public List<Usuario> getAlunosByName(String nome) throws SQLException, ClassNotFoundException {
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -129,23 +148,7 @@ public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNot
 		
 	}
 	
-	public List<Usuario> getAlunoByName(String nome) throws SQLException, ClassNotFoundException {
-		
-		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		List<Usuario> usuarios = null;
-		
-		try {
-			
-			usuarios = usuarioDAO.getAlunoNome(nome);
-			
-		}catch(SQLException e) {
-			throw e;
-		}
-		
-		return usuarios;
-		
-	}
-	
+	//Solicitar lista usuários do tipo professor pelo nome
 	public List<Usuario> getProfessorByName(String nome) throws SQLException, ClassNotFoundException {
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -163,8 +166,7 @@ public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNot
 		
 	}
 	
-	
-	
+	//Solicitar atualização de um usuário no banco
 	public boolean update(int id, String nome, String senha, String matricula, int tipo_pessoa, int permissoes) throws SQLException, ClassNotFoundException{
 		
 		UsuarioDAO UsuarioDAO = new UsuarioDAO();
@@ -180,6 +182,7 @@ public List<Usuario> getUsersByTurma(int id_turma) throws SQLException, ClassNot
 		return completo;
 	}
 	
+	//Solicitar a exclusão de um usuário no banco
 	public boolean delete(int id) throws SQLException, ClassNotFoundException{
 		
 		UsuarioDAO UsuarioDAO = new UsuarioDAO();

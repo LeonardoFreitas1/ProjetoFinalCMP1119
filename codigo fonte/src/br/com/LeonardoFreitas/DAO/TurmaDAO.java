@@ -6,21 +6,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.zkoss.zul.South;
-
 import br.com.LeonardoFreitas.Conexao.Conexao;
 import br.com.LeonardoFreitas.Controllers.ControllerUsuario;
 import br.com.LeonardoFreitas.Modelo.Turma;
 import br.com.LeonardoFreitas.Modelo.Usuario;
 
+/*
+ * Classe DAO Turma
+ * 
+ * Esta classe será responsável pela comunicação
+ * entre a aplicação e o banco de dados 
+ * referente a tabela turmas
+ * 
+ * */
+
 public class TurmaDAO extends Conexao{
 	
+	//listar todas as turmas existentes no banco
 	public List<Turma> getAllTurmas() throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
-		PreparedStatement pstmt3 = null;
 		
 		List<Turma> lista = new ArrayList<>();
 		try {
@@ -68,11 +74,11 @@ public class TurmaDAO extends Conexao{
 		
 	}
 	
+	//listar turmas por codigo (nome)
 	public List<Turma> getTurmasCodigo(String codigoTurma) throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
-		PreparedStatement pstmt3 = null;
 		
 		List<Turma> lista = new ArrayList<>();
 		try {
@@ -121,11 +127,11 @@ public class TurmaDAO extends Conexao{
 		
 	}
 	
+	//Listar usuarios por turmas
 	public List<Turma> getUsuariosCodigoTurma(String codigoTurma) throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
-		PreparedStatement pstmt3 = null;
 		
 		List<Turma> lista = new ArrayList<>();
 		try {
@@ -174,12 +180,11 @@ public class TurmaDAO extends Conexao{
 		
 	}
 
-	
+	//listar turma cadastradas em uma determinada disciplina
 	public List<Turma> getTurmasDisciplina(int id_disciplina) throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
-		PreparedStatement pstmt3 = null;
 		
 		List<Turma> lista = new ArrayList<>();
 		try {
@@ -231,6 +236,7 @@ public class TurmaDAO extends Conexao{
 		
 	}
 	
+	//listar tumas por id
 	public Turma getTurmaId(int id_turma) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -284,7 +290,7 @@ public class TurmaDAO extends Conexao{
 		return turma;
 	}
 	
-
+	//Criar uma nova turma no banco de dados
 	public boolean CreateTurma(int id_turma, String codigo_turma, int disciplina, List<Integer> usuarios) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -319,6 +325,7 @@ public class TurmaDAO extends Conexao{
 		return completo;
 	}
 	
+	//Atualizar uma turma existente no banco de dados
 	public boolean UpdateTurma(int id_turma, String codigo_turma, int disciplina) throws SQLException, ClassNotFoundException {
 		
 
@@ -344,6 +351,7 @@ public class TurmaDAO extends Conexao{
 		
 	}
 	
+	//Deletar uma turma existente no banco de dados
 	public boolean DeleteTurma(int id_turma)  throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;

@@ -1,5 +1,13 @@
 package br.com.LeonardoFreitas.Modelo;
 
+/*
+ * Classe Usuario
+ * 
+ * Esta classe será responsável por armazenar
+ * de forma estruturada a tabela usuarios do banco
+ * 
+ * */
+
 public class Usuario {
 
 	private int id_usuario;

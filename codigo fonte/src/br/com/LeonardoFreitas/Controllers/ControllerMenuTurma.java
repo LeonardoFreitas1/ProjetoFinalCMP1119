@@ -3,21 +3,17 @@ package br.com.LeonardoFreitas.Controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.ForwardEvent;
-import org.zkoss.zk.ui.event.MouseEvent;
-import org.zkoss.bind.BindUtils;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ListModelList;
@@ -25,10 +21,8 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.South;
+import org.zkoss.zul.Messagebox.ClickEvent;
 import org.zkoss.zul.Textbox;
-
-import br.com.LeonardoFreitas.DAO.UsuarioTurmaDAO;
 import br.com.LeonardoFreitas.Modelo.Disciplina;
 import br.com.LeonardoFreitas.Modelo.Turma;
 import br.com.LeonardoFreitas.Modelo.Usuario;
@@ -48,8 +42,8 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 	
 	public ControllerMenuTurma() throws ClassNotFoundException, SQLException{
 		
-		this.listaDireita = criarListaDireita();
-		this.listaEsquerda = criarListaEsquerda();
+		this.listaDireita = criarListaDireita(0);
+		this.listaEsquerda = criarListaEsquerda(0);
 	}
 	
 	@Override
@@ -59,7 +53,6 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
         IniciarComboboxDisciplina();
     	
     }
-	
 	
 	@Listen("onClick=#PesquisaSubmit")
 	public void ListarTurmas() throws ClassNotFoundException {
@@ -285,7 +278,6 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 		
 		ControllerTurma controller = new ControllerTurma();
 		
-		
 		try {
 			
 			int id_disciplina = Integer.parseInt(CodigoDisciplinas.getSelectedItem().getValue());
@@ -312,72 +304,15 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 		
 	}
 	
-	@Listen("onClick=#CadastroAlunoSubmit")
-	public void adicionarAlunoTurma() throws WrongValueException, ClassNotFoundException {
-		
-		ControllerUsuarioTurma controller = new ControllerUsuarioTurma();
-		
-		
-		try {
-			
-			int id_disciplina = Integer.parseInt(CodigoDisciplinas.getSelectedItem().getValue());
-			
-			int id_turma = Integer.parseInt(CadastroId.getText());
-			String nome = CadastroNome.getText();
-			
-				boolean resp = controller.create(Integer.parseInt(ListaAluno.getSelectedItem().getValue()), id_turma);
-			
-			if(resp)
-				Messagebox.show("Usuario Adicionado!");
-			else
-				Messagebox.show("Turma não adicionada!");
-			
-			this.LimparDadosForm();
-		
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
-		}
-		
-	}
-	@Listen("onClick=#CadastroProfessorSubmit")
-	public void adicionarProfessorTurma() throws WrongValueException, ClassNotFoundException {
-		
-		ControllerUsuarioTurma controller = new ControllerUsuarioTurma();
-		
-		
-		try {
-			
-			int id_disciplina = Integer.parseInt(CodigoDisciplinas.getSelectedItem().getValue());
-			
-			List<Integer> lista = new ArrayList<>();
-		
-			
-			int id_turma = Integer.parseInt(CadastroId.getText());
-			String nome = CadastroNome.getText();
-			
-				boolean resp = controller.create(Integer.parseInt(ListaProfessor.getSelectedItem().getValue()), id_turma);
-			
-			if(resp)
-				Messagebox.show("Usuario Adicionado!");
-			else
-				Messagebox.show("Turma não adicionada!");
-			
-			this.LimparDadosForm();
-		
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
-		}
-		
-	}
+	
 	@Listen("onClick=#CadastroAlterar")
-	public void ExcluirUsuario() throws ClassNotFoundException {
+	public void AlterarTurma() throws ClassNotFoundException {
 		
 		ControllerTurma controller = new ControllerTurma();
 		
 		int id = Integer.parseInt(CadastroId.getText());
 		String nome = CadastroNome.getText();
-		int codigo = CodigoDisciplinas.getSelectedIndex();
-		
+
 		
 		try {
 			boolean result = controller.update(id, nome, 2);
@@ -419,11 +354,6 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 		
 	}
 	
-	@Listen("onClick=#CadastroLimpar")
-	public void LimparCadastro() throws ClassNotFoundException {
-		
-		
-	}
 	
 	@Listen("onClick=#PesquisaLimpar")
 	public void LimparLista() throws ClassNotFoundException {
@@ -431,11 +361,8 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 		
 	} 
 	
-
 	@Listen("onClick=#lsbPesqSecao")
 	public void CarregarDados() throws ClassNotFoundException, SQLException {
-		
-		
 		
 		Listitem indice = lsbPesqSecao.getSelectedItem();
 		
@@ -444,6 +371,9 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 		
 		CadastroId.setText(id);
 		CadastroNome.setText(codigo);
+
+		Sessions.getCurrent().setAttribute("turma", id);
+
 		
 	}
 	
@@ -503,8 +433,7 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 	public void excluirUsuarioTurma() throws WrongValueException, ClassNotFoundException {
 		
 		ControllerUsuarioTurma controller = new ControllerUsuarioTurma();
-		
-		
+			
 		try {
 			
 			
@@ -569,27 +498,26 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 	}
 	 	
 	 	@Command
-	    public void addProjects() throws ClassNotFoundException {
+	    public void adicionarUsuarios() throws ClassNotFoundException {
 		 
-	 		 ControllerUsuario controller = new ControllerUsuario();
-			 UsuarioTurmaDAO dao = new UsuarioTurmaDAO();
+	 		 ControllerUsuarioTurma controller = new ControllerUsuarioTurma();
 
 			 try {
 				 
-				 ListModelList<Usuario> listaEsquerda = getLeftListModel();
-				 ListModelList<Usuario> listaDireita = getRightListModel();
-				 
+				 ListModelList<Usuario> listaEsquerda = getListaEsquerda();
+				 ListModelList<Usuario> listaDireita = getListaDireita();
+				 int id_turma = Integer.parseInt((String) Sessions.getCurrent().getAttribute("turma"));
 				 Set<Usuario> usuarioSelecionado = listaEsquerda.getSelection();
 				 
 				 for(Iterator<Usuario> it = usuarioSelecionado.iterator(); it.hasNext();) {
 					 
 					 Usuario usuario = it.next();
 					 
-					 dao.InsertUsuarioTurma(usuario.getId_usuario(), 10);
+					 controller.create(usuario.getId_usuario(), id_turma);
 					 
 				 }
 				 
-				 moveSelection(listaEsquerda,listaDireita, "Please select at least one Project to add.");
+				 mover(listaEsquerda,listaDireita, "Por favor selecione um registro para adicionar");
 				 
 			 }catch(SQLException e) {
 				 
@@ -600,14 +528,14 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 	    }
 	 
 	    @Command
-	    public void removeProjects() throws ClassNotFoundException {
+	    public void RemoverUsuarios() throws ClassNotFoundException {
 
-	    	 ControllerUsuario controller = new ControllerUsuario();
-			 UsuarioTurmaDAO dao = new UsuarioTurmaDAO();
+	    	 ControllerUsuarioTurma controller = new ControllerUsuarioTurma();
+	    	 
 			 try {
 				 
-				 ListModelList<Usuario> listaEsquerda = getLeftListModel();
-				 ListModelList<Usuario> listaDireita = getRightListModel();
+				 ListModelList<Usuario> listaEsquerda = getListaEsquerda();
+				 ListModelList<Usuario> listaDireita = getListaDireita();
 				 
 				 Set<Usuario> usuarioSelecionado = listaDireita.getSelection();
 				 
@@ -615,43 +543,66 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 					 
 					 Usuario usuario = it.next();
 					 
-					 dao.RemoveUsuario(usuario.getId_usuario());
+					 controller.delete(usuario.getId_usuario());
 					 
 				 }
 				 
-				 moveSelection(listaDireita, listaEsquerda, "Please select at least one Project to add.");
+				 mover(listaDireita, listaEsquerda, "Por favor, selecione um aluno ou professor.");
 				 
 			 }catch(SQLException e) {
 				 
-				 Messagebox.show(String.valueOf(e));
+				 EventListener<ClickEvent> clickListener = new EventListener<Messagebox.ClickEvent>() {
+			            public void onEvent(ClickEvent event) throws Exception {
+			                if(Messagebox.Button.YES.equals(event.getButton())) {
+			                   ControllerFrequencia controller = new ControllerFrequencia();
+			                   
+				  				Set<Usuario> usuarioSelecionado = listaDireita.getSelection();
+				  				 
+				  				for(Iterator<Usuario> it = usuarioSelecionado.iterator(); it.hasNext();) {
+									 
+									 Usuario usuario = it.next();
+									 
+									 controller.deleteUserFrequency(usuario.getId_usuario());
+									 
+								 }
+				                   
+				  				RemoverUsuarios();
+			                }
+			            }
+			        };
+			        Messagebox.show("Alunos com frequencias nesta tuma, para poder remover será deletado todas suas frequências", "Frequências dependentes", new Messagebox.Button[]{
+			                Messagebox.Button.YES, Messagebox.Button.NO }, Messagebox.QUESTION, clickListener);
+			        
+			        
+			    }
 				 
-			 }
 	    }
 	 
-	    public void moveSelection(ListModelList<Usuario> origin, ListModelList<Usuario> destination, String failMessage) {
+	    public void mover(ListModelList<Usuario> origem, ListModelList<Usuario> destino, String MensagemFalha) {
 	    	
-	        Set<Usuario> selection = origin.getSelection();
+	        Set<Usuario> selecao = origem.getSelection();
 	        
-	        if (selection.isEmpty()) {
-	            Clients.showNotification(failMessage, "info", null, null, 2000, true);
+	        if (selecao.isEmpty()) {
+	            Clients.showNotification(MensagemFalha, "info", null, null, 2000, true);
 	        } else {
-	            destination.addAll(selection);
-	            origin.removeAll(selection);
+	        	destino.addAll(selecao);
+	            origem.removeAll(selecao);
+	           
 	        }
 	    }
 	    
 	    
-	    public ListModelList<Usuario> getLeftListModel() throws ClassNotFoundException, SQLException {
+	    public ListModelList<Usuario> getListaEsquerda() throws ClassNotFoundException, SQLException {
 	    	return listaEsquerda;
 	    }
 	    
 
-	    public ListModelList<Usuario> getRightListModel() throws ClassNotFoundException {
+	    public ListModelList<Usuario> getListaDireita() throws ClassNotFoundException {
 	    	return listaDireita;
 	    }
 	    
 	    
-	    private ListModelList<Usuario> criarListaEsquerda() throws ClassNotFoundException, SQLException {
+	    private ListModelList<Usuario> criarListaEsquerda(int id_turma) throws ClassNotFoundException, SQLException {
 	    	
 	    	ControllerUsuario controller = new ControllerUsuario();
     		ListModelList<Usuario> lista = new ListModelList<>();
@@ -662,7 +613,7 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 			
 				 for(int i = Todos.size() -1; i >= 0; i--) {
 					 
-					 for(Usuario matriculados: controller.getUsersByTurma(10)) {
+					 for(Usuario matriculados: controller.getUsersByTurma(id_turma)) {
 						
 						 if(Todos.get(i).getId_usuario() == matriculados.getId_usuario()) {
 							 
@@ -680,7 +631,6 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 						 
 				 }
 				 
-				 
 				 return lista;
 				 
 			 }catch(Exception e) {
@@ -692,7 +642,7 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 	    	
 	    }
 	    
-	    private ListModelList<Usuario> criarListaDireita() throws ClassNotFoundException {
+	    private ListModelList<Usuario> criarListaDireita(int id_turma) throws ClassNotFoundException {
 	    	
 	    	ControllerUsuario controller = new ControllerUsuario();
     		ListModelList<Usuario> lista = new ListModelList<>();
@@ -700,11 +650,12 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 		 try {
 			 
 
-			 for(Usuario usuario: controller.getUsersByTurma(10)) {
+			 for(Usuario usuario: controller.getUsersByTurma(id_turma)) {
 				 
 				 lista.add(usuario);
 
 			 }
+			 
 			 
 			 return lista;
 			 
@@ -717,45 +668,23 @@ public class ControllerMenuTurma extends SelectorComposer<Component>{
 	    }
 	    
 	    @Command
-	    public void refreshInfo() throws ClassNotFoundException, SQLException {
+	    public void load() throws ClassNotFoundException, SQLException {
 	    	
-	    	ControllerUsuario controller = new ControllerUsuario();
-	    	List<Usuario> Todos = controller.getAll();
+	    	for(int i = this.listaDireita.size() -1; i >= 0; i--) {
+	    		this.listaDireita.remove(i);
+	    	}
 	    	
-		 try {
-			 
-			 for(int i = Todos.size() -1; i >= 0; i--) {
-				 
-				 for(Usuario matriculados: controller.getUsersByTurma(10)) {
-					
-					 if(Todos.get(i).getId_usuario() == matriculados.getId_usuario()) {
-						 
-						 Todos.remove(i);
-						
-					 }
-					 
-				 }
-
-			 }
-			 
-			 for(Usuario naoMatriculados: Todos) {
-				 
-				this.listaEsquerda.add(naoMatriculados);
-					 
-			 }
-
-			 for(Usuario usuario: controller.getUsersByTurma(10)) {
-				 
-				 this.listaDireita.add(usuario);
-
-			 }
-			 
-			 
-			 
-		 }catch(Exception e) {
-			 
-		 }
-		
-	}
+	    	for(int i = this.listaEsquerda.size() -1; i >= 0; i--) {
+	    		this.listaEsquerda.remove(i);
+	    	}
+	    	
+	    	int id_turma = Integer.parseInt((String) Sessions.getCurrent().getAttribute("turma"));
+	    	
+	    	this.listaDireita.addAll(this.criarListaDireita(id_turma));
+	    	this.listaEsquerda.addAll(this.criarListaEsquerda(id_turma));
+			
+			
+			
+	    }
 	
 }

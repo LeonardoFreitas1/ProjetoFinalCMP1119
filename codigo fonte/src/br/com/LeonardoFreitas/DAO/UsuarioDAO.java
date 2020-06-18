@@ -6,13 +6,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import br.com.LeonardoFreitas.Conexao.Conexao;
-import br.com.LeonardoFreitas.Controllers.ControllerUsuario;
 import br.com.LeonardoFreitas.Modelo.Usuario;
+
+/*
+ * Classe DAO Usuario
+ * 
+ * Esta classe será responsável pela comunicação
+ * entre a aplicação e o banco de dados 
+ * referente a tabela usuarios
+ * 
+ * */
 
 public class UsuarioDAO extends Conexao{
 	
+	//Listar todos os usuarios
 	public List<Usuario> getAllUsuarios() throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
@@ -43,11 +51,10 @@ public class UsuarioDAO extends Conexao{
 		
 	}
 	
+	//Pegar usuarios cadastrados em alguma turma
 	public List<Usuario> getUsuariosCadastrados(int id_turma) throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
-		PreparedStatement pstmt2 = null;
-		PreparedStatement pstmt3 = null;
 		
 		List<Usuario> lista = new ArrayList<>();
 		
@@ -59,10 +66,6 @@ public class UsuarioDAO extends Conexao{
 			pstmt.setInt(2, id_turma);
 			
 			ResultSet rs = pstmt.executeQuery();
-			ControllerUsuario controllerUsuario = new ControllerUsuario();
-			List<Integer> listaId = new ArrayList<>();
-			int id_usuario_turmas = 0;
-			List<Usuario> usuarios = new ArrayList<>();
 			
 			while(rs.next()) {
 				
@@ -84,6 +87,7 @@ public class UsuarioDAO extends Conexao{
 		
 	}
 	
+	//listar todos os usuarios do tipo aluno
 	public List<Usuario> getAllAlunos() throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
@@ -114,37 +118,39 @@ public class UsuarioDAO extends Conexao{
 		return lista;
 		
 	}
+	
+	//Listar todos os usuarios do tipo professor
 	public List<Usuario> getAllProfessor() throws SQLException, ClassNotFoundException{
 	
-	PreparedStatement pstmt = null;
-	List<Usuario> lista = new ArrayList<>();
-	try {
-	
-		Connection conn = this.getConnection();
-		pstmt = conn.prepareStatement("SELECT * FROM usuario WHERE tipo_pessoa=?");
-		pstmt.setInt(1, 1);
-		ResultSet rs = pstmt.executeQuery();
+		PreparedStatement pstmt = null;
+		List<Usuario> lista = new ArrayList<>();
+		try {
 		
-		while(rs.next()) {
+			Connection conn = this.getConnection();
+			pstmt = conn.prepareStatement("SELECT * FROM usuario WHERE tipo_pessoa=?");
+			pstmt.setInt(1, 1);
+			ResultSet rs = pstmt.executeQuery();
 			
-			int id = rs.getInt("id_usuario");
-			String nome = rs.getString("nome");
-			String senha = rs.getString("senha");
-			String matricula = rs.getString("matricula");
-			int tipo_pessoa = rs.getInt("tipo_pessoa");
-			int permissoes= rs.getInt("permissoes");
+			while(rs.next()) {
+				
+				int id = rs.getInt("id_usuario");
+				String nome = rs.getString("nome");
+				String senha = rs.getString("senha");
+				String matricula = rs.getString("matricula");
+				int tipo_pessoa = rs.getInt("tipo_pessoa");
+				int permissoes= rs.getInt("permissoes");
+				
+				lista.add(new Usuario(id, nome, senha, matricula, tipo_pessoa,  permissoes));
+				
+			}
 			
-			lista.add(new Usuario(id, nome, senha, matricula, tipo_pessoa,  permissoes));
-			
+		}catch(SQLException e) {
+			throw e;
 		}
-		
-	}catch(SQLException e) {
-		throw e;
-	}
-	return lista;
+		return lista;
 	
 }
-
+	//listar usuario por id
 	public Usuario getUsuarioId(int id) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -178,6 +184,7 @@ public class UsuarioDAO extends Conexao{
 		return usuario;
 	}
 	
+	//listar usuario por matricula
 	public Usuario getUsuarioMatricula(String matricula) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -211,6 +218,7 @@ public class UsuarioDAO extends Conexao{
 		return usuario;
 	}
 	
+	//Inserir um novo usuario no banco
 	public boolean CreateUsuario(String nome, String senha, String matricula, int tipo_pessoa, int permissoes) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -235,41 +243,8 @@ public class UsuarioDAO extends Conexao{
 		}
 		return completo;
 	}
-	
-	public List<Usuario> getAlunoNome(String nome) throws ClassNotFoundException, SQLException {
 		
-		PreparedStatement pstmt = null;
-		List<Usuario> alunos = new ArrayList<>();
-		
-		try {
-		
-			Connection conn = this.getConnection();
-			pstmt = conn.prepareStatement("SELECT * FROM usuario where tipo_pessoa=2 AND nome LIKE ?");
-			
-			pstmt.setString(1, nome + "%");
-			
-			ResultSet rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				
-				int id = rs.getInt("id_usuario");
-				String nomeQuery = rs.getString("nome");
-				String senha = rs.getString("senha");
-				String matricula = rs.getString("matricula");
-				int tipo_pessoa = rs.getInt("tipo_pessoa");
-				int permissoes= rs.getInt("permissoes");
-				
-				alunos.add(new Usuario(id, nomeQuery, senha, matricula, tipo_pessoa,  permissoes));
-				
-				
-			}
-			
-		}catch(SQLException e) {
-			throw e;
-		}
-		return alunos;
-	}
-	
+	//listar diversos usuarios por nome
 	public List<Usuario> getAlunosNome(String nome) throws ClassNotFoundException, SQLException {
 		
 		PreparedStatement pstmt = null;
@@ -303,6 +278,7 @@ public class UsuarioDAO extends Conexao{
 		return lista;
 	}
 	
+	//listar diversos usuarios do tipo professor pelo nome
 	public List<Usuario> getProfessorNome(String nome) throws ClassNotFoundException, SQLException {
 		
 		PreparedStatement pstmt = null;
@@ -336,6 +312,7 @@ public class UsuarioDAO extends Conexao{
 		return lista;
 	}
 	
+	//Atualizar um usuario no banco
 	public boolean UpdateUsuario(int id, String nome, String senha, String matricula, int tipo_pessoa, int permissoes) throws SQLException, ClassNotFoundException {
 		
 
@@ -364,6 +341,7 @@ public class UsuarioDAO extends Conexao{
 		
 	}
 	
+	//Deletar um usuario no banco
 	public boolean DeleteUsuario(int id)  throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;

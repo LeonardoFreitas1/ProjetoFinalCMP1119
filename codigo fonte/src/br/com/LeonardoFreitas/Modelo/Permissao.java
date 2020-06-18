@@ -1,5 +1,13 @@
 package br.com.LeonardoFreitas.Modelo;
 
+/*
+ * Classe Permissao
+ * 
+ * Esta classe será responsável por armazenar
+ * de forma estruturada a tabela permissoes do banco
+ * 
+ * */
+
 public class Permissao {
 	
 	private int id_permissao;

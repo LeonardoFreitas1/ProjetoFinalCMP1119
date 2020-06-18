@@ -22,13 +22,13 @@ public class ControllerMenuLogin extends SelectorComposer<Component>{
 	
 	@Listen("onClick=#Loginsubmit")
 	public void Validar() throws WrongValueException, ClassNotFoundException {
+		
 		ControllerUsuario controller = new ControllerUsuario();
+		
 		try {
 			
 			Usuario usuario = controller.getByMatricula(matricula.getValue());
-			
-			
-			
+		
 			if(usuario.getSenha().equals(senha.getValue())) {
 				
 				//Armazenar permissao ao Session Storage
@@ -42,13 +42,19 @@ public class ControllerMenuLogin extends SelectorComposer<Component>{
 				
 				//Redirecionar para pagina principal
 				Executions.sendRedirect("http://localhost:8080/ProjetoFinal/home.zul");
+				
 			}else {
-			Messagebox.show("Senha incorreta!");
+				Messagebox.show("Senha incorreta!");
 			}
+			
 		}catch(SQLException e) {
+		
 			Messagebox.show("Este usuario nao exite!");
+		
 		}catch(NullPointerException e) {
+			
 			Messagebox.show("Matricula incorreta!");
+			
 		}
 		
 	}

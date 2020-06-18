@@ -9,8 +9,18 @@ import java.util.List;
 import br.com.LeonardoFreitas.Conexao.Conexao;
 import br.com.LeonardoFreitas.Modelo.Disciplina;
 
+/*
+ * Classe DAO Disciplina
+ * 
+ * Esta classe será responsável pela comunicação
+ * entre a aplicação e o banco de dados 
+ * referente a tabela disciplinas
+ * 
+ * */
+
 public class DisciplinaDAO extends Conexao{
 	
+	//Listar todas as disciplinas existentes no banco
 	public List<Disciplina> getAllDisciplinas() throws SQLException, ClassNotFoundException{
 			
 			PreparedStatement pstmt = null;
@@ -38,6 +48,7 @@ public class DisciplinaDAO extends Conexao{
 			
 		}
 	
+	//Listar apenas uma disciplina pelo nome
 	public Disciplina getDisciplinaNome(String nome) throws ClassNotFoundException, SQLException {
 		
 		PreparedStatement pstmt = null;
@@ -67,7 +78,8 @@ public class DisciplinaDAO extends Conexao{
 		return disciplina;
 	}
 	
-public List<Disciplina> getListaDisciplinaNome(String nome) throws ClassNotFoundException, SQLException {
+	//Listar diversar disciplinas pelo nome
+	public List<Disciplina> getListaDisciplinaNome(String nome) throws ClassNotFoundException, SQLException {
 		
 		PreparedStatement pstmt = null;
 		List<Disciplina> disciplinas = new ArrayList<>();
@@ -96,6 +108,7 @@ public List<Disciplina> getListaDisciplinaNome(String nome) throws ClassNotFound
 		return disciplinas;
 	}
 	
+	//Buscar disciplina pelo id
 	public Disciplina getDisciplinaId(int id_disciplina) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -126,7 +139,7 @@ public List<Disciplina> getListaDisciplinaNome(String nome) throws ClassNotFound
 		return turma;
 	}
 	
-
+	//Adicionar uma nova disciplina no banco de dados
 	public boolean CreateDisciplina(String nome_disciplina, String codigo_disciplina) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -149,6 +162,7 @@ public List<Disciplina> getListaDisciplinaNome(String nome) throws ClassNotFound
 		return completo;
 	}
 	
+	//Atualizar uma disciplina existente no banco de dados
 	public boolean UpdateDisciplina(int id_disciplina, String nome_disciplina, String codigo_disciplina) throws SQLException, ClassNotFoundException {
 		
 
@@ -174,6 +188,7 @@ public List<Disciplina> getListaDisciplinaNome(String nome) throws ClassNotFound
 		
 	}
 	
+	//Deletar uma disciplina existente no banco de dados
 	public boolean DeleteDisciplina(int id_disciplina)  throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;

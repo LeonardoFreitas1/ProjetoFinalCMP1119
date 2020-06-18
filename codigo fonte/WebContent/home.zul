@@ -8,14 +8,14 @@
         <navbar id="navbar" orient="vertical" collapsed="false"
                 onSelect="@command('navigatePage', target=self.selectedItem.attributes['navigationPage'])">
            
-           <nav label="Usuarios" iconSclass="z-icon-user" badgeText="2"
+           <nav label="Usuarios" iconSclass="z-icon-user"
                 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
                 
-			<nav label="Academico" iconSclass="z-icon-clipboard" badgeText="2"
+			<nav label="Academico" iconSclass="z-icon-clipboard" 
                 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
            
           
-           <nav label="Relatorios" iconSclass="z-icon-clipboard" badgeText="2"
+           <nav label="Relatorios" iconSclass="z-icon-list" 
                 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
                 
             <template name="navitem" var="navigationPage">

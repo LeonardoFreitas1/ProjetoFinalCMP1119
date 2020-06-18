@@ -1,5 +1,13 @@
 package br.com.LeonardoFreitas.Modelo;
 
+/*
+ * Classe TipoPessoa
+ * 
+ * Esta classe será responsável por armazenar
+ * de forma estruturada a tabela tipo_pessoa do banco
+ * 
+ * */
+
 public class TipoPessoa {
 	
 	private int id_tipo;

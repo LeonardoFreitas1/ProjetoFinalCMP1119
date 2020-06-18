@@ -2,6 +2,14 @@ package br.com.LeonardoFreitas.Modelo;
 
 import java.util.List;
 
+/*
+ * Classe Turma
+ * 
+ * Esta classe será responsável por armazenar
+ * de forma estruturada a tabela turmas do banco
+ * 
+ * */
+
 public class Turma {
 	
 	private int id_turma;

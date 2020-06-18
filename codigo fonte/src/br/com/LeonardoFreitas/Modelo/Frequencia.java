@@ -1,5 +1,13 @@
 package br.com.LeonardoFreitas.Modelo;
 
+/*
+ * Classe Frequencia
+ * 
+ * Esta classe será responsável por armazenar
+ * de forma estruturada a Frequencia do banco
+ * 
+ * */
+
 public class Frequencia {
 	
 	private int id_frequencia;

@@ -3,10 +3,6 @@ package br.com.LeonardoFreitas.Controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.zkoss.zul.South;
-
-import br.com.LeonardoFreitas.DAO.DisciplinaDAO;
 import br.com.LeonardoFreitas.DAO.TurmaDAO;
 import br.com.LeonardoFreitas.DAO.UsuarioTurmaDAO;
 import br.com.LeonardoFreitas.Modelo.Disciplina;
@@ -14,7 +10,16 @@ import br.com.LeonardoFreitas.Modelo.Turma;
 import br.com.LeonardoFreitas.Modelo.Usuario;
 import br.com.LeonardoFreitas.Modelo.UsuarioTurma;
 
+/*
+ * Classe Controller Turma
+ * 
+ * Esta classe será responsável pelas solicitações e validações
+ * entre a aplicação e a classe TurmaDAO 
+ * 
+ * */
+
 public class ControllerTurma {
+	
 	
 	public List<Turma> getAll() throws SQLException, ClassNotFoundException{
 		
@@ -68,7 +73,7 @@ public class ControllerTurma {
 		List<Turma> lista = new ArrayList<>();
 		
 		try {
-			 List<Usuario> usuarios = controllerUsuario.getAlunoByName(nome);
+			 List<Usuario> usuarios = controllerUsuario.getAlunosByName(nome);
 			 
 			 for(Usuario usuario: usuarios) {
 				 

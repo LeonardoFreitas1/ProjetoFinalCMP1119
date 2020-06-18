@@ -10,8 +10,18 @@ import java.util.List;
 import br.com.LeonardoFreitas.Conexao.Conexao;
 import br.com.LeonardoFreitas.Modelo.Permissao;
 
+/*
+ * Classe DAO Permissao
+ * 
+ * Esta classe será responsável pela comunicação
+ * entre a aplicação e o banco de dados 
+ * referente a tabela permissoes
+ * 
+ * */
+
 public class PermissaoDAO extends Conexao{
 	
+	//listar todos os tipo de permissoes existentes no banco
 	public List<Permissao> getAllPermissoes() throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
@@ -38,6 +48,7 @@ public class PermissaoDAO extends Conexao{
 		
 	}
 	
+	//Criar um novo tipo de permissao
 	public boolean CreatePermissao(String nome_permissao) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -59,6 +70,7 @@ public class PermissaoDAO extends Conexao{
 		return completo;
 	}
 	
+	//Atualizar uma permissao existente no banco
 	public boolean UpdatePermissao(int id_permissao, String nome_permissao) throws SQLException, ClassNotFoundException {
 		
 
@@ -83,6 +95,7 @@ public class PermissaoDAO extends Conexao{
 		
 	}
 	
+	//Deletar uma permissao existente no banco
 	public boolean DeletePermissao(int id_permissao)  throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;

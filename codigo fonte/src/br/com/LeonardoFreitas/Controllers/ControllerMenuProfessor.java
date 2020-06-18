@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -30,88 +32,111 @@ public class ControllerMenuProfessor extends SelectorComposer<Component>{
 	@Listen("onClick=#CadastroSubmit")
 	public void adicionarUsuario() throws WrongValueException, ClassNotFoundException {
 		
-		ControllerUsuario controller = new ControllerUsuario();
-		
-		int permissao = CadastroPermissao.getSelectedItem().getIndex() + 1;
-		int tipo_pessoa = 2;
-		
+
 		try {
 			
-			boolean resp = controller.create(CadastroNome.getValue(), CadastroSenha.getValue(), CadastroMatricula.getValue(), tipo_pessoa, permissao);
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 			
-			if(resp)
-				Messagebox.show("Usuário Adicionado!");
-			else
-				Messagebox.show("Usuário não adicionado!");
-			
-			this.LimparDadosForm();
-		
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
+				ControllerUsuario controller = new ControllerUsuario();
+				
+				int permissao = CadastroPermissao.getSelectedItem().getIndex() + 1;
+				int tipo_pessoa = 1;
+				
+				try {
+					
+					boolean resp = controller.create(CadastroNome.getValue(), CadastroSenha.getValue(), CadastroMatricula.getValue(), tipo_pessoa, permissao);
+					
+					if(resp)
+						Messagebox.show("Usuário Adicionado!");
+					else
+						Messagebox.show("Usuário não adicionado!");
+					
+					this.LimparDadosForm();
+				
+				}catch(SQLException e) {
+					Messagebox.show(String.valueOf(e));
+				}
+			}else {
+				Messagebox.show("Você não tem permissao para Incluir um professor!");
+			}
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
-		
 	}
 	
 	@Listen("onClick=#PesquisaSubmit")
 	public void ListarUsuarios() throws ClassNotFoundException {
 		
-		lsbPesqSecao.getItems().clear();
-		
-		String nomeUsuario = PesquisaParametros.getText();
-
-		ControllerUsuario controller = new ControllerUsuario();
-		
 		try {
 			
-			List<Usuario> lista = controller.getProfessorByName(nomeUsuario);
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
 			
-			for(Usuario usuario: lista) {
+			if(tipo_usuario == 1) {
+			
+			lsbPesqSecao.getItems().clear();
+			
+			String nomeUsuario = PesquisaParametros.getText();
+	
+			ControllerUsuario controller = new ControllerUsuario();
+			
+			try {
 				
-			Listcell id = new Listcell();
-			Listcell nome = new Listcell();
-			Listcell matricula = new Listcell();
-			Listcell senha = new Listcell();
-			Listcell tipo = new Listcell();
-			Listcell permissao = new Listcell();
+				List<Usuario> lista = controller.getProfessorByName(nomeUsuario);
+				
+				for(Usuario usuario: lista) {
+					
+				Listcell id = new Listcell();
+				Listcell nome = new Listcell();
+				Listcell matricula = new Listcell();
+				Listcell senha = new Listcell();
+				Listcell tipo = new Listcell();
+				Listcell permissao = new Listcell();
+				
 			
-		
-			
-			id.setAttribute("id", String.valueOf(usuario.getId_usuario()));
-			id.setLabel(String.valueOf(usuario.getId_usuario()));
-			
-			nome.setAttribute("nome", String.valueOf(usuario.getNome()));
-			nome.setLabel(String.valueOf(usuario.getNome()));
-			
-			matricula.setAttribute("matricula", String.valueOf(usuario.getMatricula()));
-			matricula.setLabel(String.valueOf(usuario.getMatricula()));
-			
-			senha.setAttribute("senha", String.valueOf(usuario.getSenha()));
-			senha.setLabel(String.valueOf(usuario.getSenha()));
-			
-			permissao.setAttribute("permissao", String.valueOf(usuario.getPermissoes()));
-			permissao.setLabel(String.valueOf(usuario.getPermissoes()));
-			
-			tipo.setAttribute("tipo", String.valueOf(usuario.getTipo_pessoa()));
-			tipo.setLabel(String.valueOf(usuario.getTipo_pessoa()));
-			
-			Listitem listitem = new Listitem();
-			
-			listitem.appendChild(id);
-			listitem.appendChild(nome);
-			listitem.appendChild(matricula);
-			listitem.appendChild(senha);
-			listitem.appendChild(permissao);
-			listitem.appendChild(tipo);
-			
-			
-			lsbPesqSecao.appendChild(listitem);
+				
+				id.setAttribute("id", String.valueOf(usuario.getId_usuario()));
+				id.setLabel(String.valueOf(usuario.getId_usuario()));
+				
+				nome.setAttribute("nome", String.valueOf(usuario.getNome()));
+				nome.setLabel(String.valueOf(usuario.getNome()));
+				
+				matricula.setAttribute("matricula", String.valueOf(usuario.getMatricula()));
+				matricula.setLabel(String.valueOf(usuario.getMatricula()));
+				
+				senha.setAttribute("senha", String.valueOf(usuario.getSenha()));
+				senha.setLabel(String.valueOf(usuario.getSenha()));
+				
+				permissao.setAttribute("permissao", String.valueOf(usuario.getPermissoes()));
+				permissao.setLabel(String.valueOf(usuario.getPermissoes()));
+				
+				tipo.setAttribute("tipo", String.valueOf(usuario.getTipo_pessoa()));
+				tipo.setLabel(String.valueOf(usuario.getTipo_pessoa()));
+				
+				Listitem listitem = new Listitem();
+				
+				listitem.appendChild(id);
+				listitem.appendChild(nome);
+				listitem.appendChild(matricula);
+				listitem.appendChild(senha);
+				listitem.appendChild(permissao);
+				listitem.appendChild(tipo);
+				
+				
+				lsbPesqSecao.appendChild(listitem);
+				}
+				LimparDadosLista();
+				
+			}catch(SQLException e) {
+				Messagebox.show("Ocorreu um erro durante a inclusão");
 			}
-			LimparDadosLista();
-			
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+			}else {
+				Messagebox.show("Você não tem permissao para realizar esta ação!");
+			}
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
-			
 	}
 	@Listen("onClick=#PesquisaLimpar")
 	public void AlterarUsuario() throws ClassNotFoundException {
@@ -122,51 +147,77 @@ public class ControllerMenuProfessor extends SelectorComposer<Component>{
 	@Listen("onClick=#CadastroAlterar")
 	public void ExcluirUsuario() throws ClassNotFoundException {
 		
-		ControllerUsuario controller = new ControllerUsuario();
-		
-		int id = Integer.parseInt(CadastroId.getText());
-		String nome = CadastroNome.getText();
-		String matricula = CadastroMatricula.getText();
-		String senha = CadastroSenha.getText();
-		int tipo_pessoa = CadastroTipo.getSelectedIndex() + 1;
-		int permissoes = CadastroPermissao.getSelectedIndex() + 1;
-		
-		
 		try {
-			boolean result = controller.update(id, nome, senha, matricula, tipo_pessoa, permissoes);
 			
-			if(result)
-				Messagebox.show("Usuario alterado com sucesso!");
-			else
-				Messagebox.show("Não foi possivel alterar o Usuario!");
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 			
-			this.LimparDadosForm();
-			this.LimparDadosLista();
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
 			
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+			ControllerUsuario controller = new ControllerUsuario();
+			
+			int id = Integer.parseInt(CadastroId.getText());
+			String nome = CadastroNome.getText();
+			String matricula = CadastroMatricula.getText();
+			String senha = CadastroSenha.getText();
+			int tipo_pessoa = CadastroTipo.getSelectedIndex() + 1;
+			int permissoes = CadastroPermissao.getSelectedIndex() + 1;
+			
+			
+			try {
+				boolean result = controller.update(id, nome, senha, matricula, tipo_pessoa, permissoes);
+				
+				if(result)
+					Messagebox.show("Usuario alterado com sucesso!");
+				else
+					Messagebox.show("Não foi possivel alterar o Usuario!");
+				
+				this.LimparDadosForm();
+				this.LimparDadosLista();
+				
+			}catch(SQLException e) {
+				Messagebox.show(String.valueOf(e));
+			}
+			}else {
+				Messagebox.show("Você não tem permissao para alterar!");
+			}
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
 		
 	}
 	@Listen("onClick=#CadastroExcluir")
 	public void LimparFormulario() throws ClassNotFoundException {
 		
-		ControllerUsuario controller = new ControllerUsuario();
-		
-		int id = Integer.parseInt(CadastroId.getText());
-		
 		try {
-		boolean result = controller.delete(id);
 			
-			if(result)
-				Messagebox.show("Usuario Deletado com sucesso!");
-			else
-				Messagebox.show("Não foi possivel deletar o Usuario!");
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
+		
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
 			
-			this.LimparDadosForm();
-			this.LimparDadosLista();
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+				ControllerUsuario controller = new ControllerUsuario();
+				
+				int id = Integer.parseInt(CadastroId.getText());
+				
+				try {
+				boolean result = controller.delete(id);
+					
+					if(result)
+						Messagebox.show("Usuario Deletado com sucesso!");
+					else
+						Messagebox.show("Não foi possivel deletar o Usuario!");
+					
+					this.LimparDadosForm();
+					this.LimparDadosLista();
+				}catch(SQLException e) {
+					Messagebox.show("Você deve remover este professor de suas respectivas turmas antes!");
+				}
+			}else {
+				Messagebox.show("Você não tem permissao para excluir!");
+			}
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
 		
 	}

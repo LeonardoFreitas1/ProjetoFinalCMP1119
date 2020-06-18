@@ -1,5 +1,13 @@
 package br.com.LeonardoFreitas.Modelo;
  
+/*
+ * Classe Pagina
+ * 
+ * Esta classe será responsável por armazenar
+ * o modelo de uma pagina no zk
+ *   
+ * */
+
 public abstract class Pagina {
     private String titulo;
     private String url;

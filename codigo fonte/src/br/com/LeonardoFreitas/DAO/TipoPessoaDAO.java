@@ -10,9 +10,19 @@ import java.util.List;
 import br.com.LeonardoFreitas.Conexao.Conexao;
 import br.com.LeonardoFreitas.Modelo.TipoPessoa;
 
+/*
+ * Classe DAO TipoPessoa
+ * 
+ * Esta classe será responsável pela comunicação
+ * entre a aplicação e o banco de dados 
+ * referente a tabela tipo_pessoa
+ * 
+ * */
+
 public class TipoPessoaDAO extends Conexao {
 	
-public List<TipoPessoa> getAllTipoPessoas() throws SQLException, ClassNotFoundException{
+	//Listar todos os tipos de pessoas existente no banco
+	public List<TipoPessoa> getAllTipoPessoas() throws SQLException, ClassNotFoundException{
 		
 		PreparedStatement pstmt = null;
 		List<TipoPessoa> lista = new ArrayList<>();
@@ -38,6 +48,7 @@ public List<TipoPessoa> getAllTipoPessoas() throws SQLException, ClassNotFoundEx
 		
 	}
 	
+	//Criar um novo tipo de pessoa
 	public boolean CreateTipoPessoa(String nome_tipo) throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;
@@ -59,6 +70,7 @@ public List<TipoPessoa> getAllTipoPessoas() throws SQLException, ClassNotFoundEx
 		return completo;
 	}
 	
+	//Atualizar um tipo de pessoa existente no banco de dados
 	public boolean UpdateTipoPessoa(int id_tipo_pessoa, String nome_tipo) throws SQLException, ClassNotFoundException {
 		
 
@@ -83,6 +95,7 @@ public List<TipoPessoa> getAllTipoPessoas() throws SQLException, ClassNotFoundEx
 		
 	}
 	
+	//Deletar um tipo de pessoa existente no banco
 	public boolean DeleteTipoPessoa(int id_tipo_pessoa)  throws SQLException, ClassNotFoundException {
 		
 		PreparedStatement pstmt = null;

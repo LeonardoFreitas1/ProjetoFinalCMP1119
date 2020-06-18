@@ -3,6 +3,8 @@
 import java.sql.SQLException;
 import java.util.List;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -26,22 +28,34 @@ public class ControllerMenuDisciplina extends SelectorComposer<Component>{
 	@Listen("onClick=#CadastroSubmit")
 	public void adicionarDisciplina() throws WrongValueException, ClassNotFoundException {
 		
-		ControllerDisciplina controller = new ControllerDisciplina();
-		
 		try {
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 			
-			
-			boolean resp = controller.create(CadastroNome.getValue(), CadastroCodigo.getValue());
-			
-			if(resp)
-				Messagebox.show("Disciplina Adicionada!");
-			else
-				Messagebox.show("Disciplina não adicionada!");
-			
-			this.LimparDadosForm();
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
 		
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+				ControllerDisciplina controller = new ControllerDisciplina();
+				
+				try {
+					
+					
+					boolean resp = controller.create(CadastroNome.getValue(), CadastroCodigo.getValue());
+					
+					if(resp)
+						Messagebox.show("Disciplina Adicionada!");
+					else
+						Messagebox.show("Disciplina não adicionada!");
+					
+					this.LimparDadosForm();
+				
+				}catch(SQLException e) {
+					Messagebox.show(String.valueOf(e));
+				}
+			}else {
+				Messagebox.show("Voce não tem permissao para adicionar uma disciplina!");
+			}
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
 		
 	}
@@ -49,45 +63,55 @@ public class ControllerMenuDisciplina extends SelectorComposer<Component>{
 	@Listen("onClick=#PesquisaSubmit")
 	public void ListarUsuarios() throws ClassNotFoundException {
 		
-		lsbPesqSecao.getItems().clear();
-		
-		String nomeDisiciplina = PesquisaParametros.getText();
-
-		ControllerDisciplina controller = new ControllerDisciplina();
-		
 		try {
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
 			
-			List<Disciplina> lista = controller.getListByName(nomeDisiciplina);
-			
-			for(Disciplina disciplina: lista) {
+			if(tipo_usuario == 1) {
+		
+				lsbPesqSecao.getItems().clear();
 				
-			Listcell id = new Listcell();
-			Listcell nome = new Listcell();
-			Listcell codigo = new Listcell();
-			
-			id.setAttribute("id", String.valueOf(disciplina.getId_disciplina()));
-			id.setLabel(String.valueOf(disciplina.getId_disciplina()));
-			
-			nome.setAttribute("nome", String.valueOf(disciplina.getNome_disciplina()));
-			nome.setLabel(String.valueOf(disciplina.getNome_disciplina()));
-			
-			codigo.setAttribute("codigo", String.valueOf(disciplina.getCodigo_disciplina()));
-			codigo.setLabel(String.valueOf(disciplina.getCodigo_disciplina()));
-			
-			Listitem listitem = new Listitem();
-			
-			listitem.appendChild(id);
-			listitem.appendChild(nome);
-			listitem.appendChild(codigo);
-			
-			lsbPesqSecao.appendChild(listitem);
+				String nomeDisiciplina = PesquisaParametros.getText();
+		
+				ControllerDisciplina controller = new ControllerDisciplina();
+				
+				try {
+					
+					List<Disciplina> lista = controller.getListByName(nomeDisiciplina);
+					
+					for(Disciplina disciplina: lista) {
+						
+					Listcell id = new Listcell();
+					Listcell nome = new Listcell();
+					Listcell codigo = new Listcell();
+					
+					id.setAttribute("id", String.valueOf(disciplina.getId_disciplina()));
+					id.setLabel(String.valueOf(disciplina.getId_disciplina()));
+					
+					nome.setAttribute("nome", String.valueOf(disciplina.getNome_disciplina()));
+					nome.setLabel(String.valueOf(disciplina.getNome_disciplina()));
+					
+					codigo.setAttribute("codigo", String.valueOf(disciplina.getCodigo_disciplina()));
+					codigo.setLabel(String.valueOf(disciplina.getCodigo_disciplina()));
+					
+					Listitem listitem = new Listitem();
+					
+					listitem.appendChild(id);
+					listitem.appendChild(nome);
+					listitem.appendChild(codigo);
+					
+					lsbPesqSecao.appendChild(listitem);
+					}
+					LimparDadosLista();
+					
+				}catch(SQLException e) {
+					Messagebox.show(String.valueOf(e));
+				}
+			}else {
+				Messagebox.show("Você não tem permissão para realizar esta pesquisa");
 			}
-			LimparDadosLista();
-			
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
-			
 	}
 	@Listen("onClick=#PesquisaLimpar")
 	public void AlterarUsuario() throws ClassNotFoundException {
@@ -98,51 +122,75 @@ public class ControllerMenuDisciplina extends SelectorComposer<Component>{
 	@Listen("onClick=#CadastroAlterar")
 	public void ExcluirUsuario() throws ClassNotFoundException {
 		
-		ControllerDisciplina controller = new ControllerDisciplina();
-		
-		int id = Integer.parseInt(CadastroId.getText());
-		String nome = CadastroNome.getText();
-		String codigo = CadastroCodigo.getText();
-		
-		
 		try {
-			boolean result = controller.update(id, nome, codigo);
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 			
-			if(result)
-				Messagebox.show("Disciplina alterada com sucesso!");
-			else
-				Messagebox.show("Não foi possivel alterar a Disciplina!");
-			
-			this.LimparDadosForm();
-			this.LimparDadosLista();
-			
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
-		}
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
+		
+					ControllerDisciplina controller = new ControllerDisciplina();
+					
+					int id = Integer.parseInt(CadastroId.getText());
+					String nome = CadastroNome.getText();
+					String codigo = CadastroCodigo.getText();
+					
+					
+					try {
+						boolean result = controller.update(id, nome, codigo);
+						
+						if(result)
+							Messagebox.show("Disciplina alterada com sucesso!");
+						else
+							Messagebox.show("Não foi possivel alterar a Disciplina!");
+						
+						this.LimparDadosForm();
+						this.LimparDadosLista();
+						
+					}catch(SQLException e) {
+						Messagebox.show(String.valueOf(e));
+					}
+			}else {
+				Messagebox.show("Você não tem permissão para alterar este registro!");
+			}
+			}catch(NullPointerException e) {
+				Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
+			}
 		
 	}
+	
 	@Listen("onClick=#CadastroExcluir")
 	public void LimparFormulario() throws ClassNotFoundException {
 		
-		ControllerDisciplina controller = new ControllerDisciplina();
-		
-		int id = Integer.parseInt(CadastroId.getText());
-		
 		try {
+			int tipo_usuario = (int) Sessions.getCurrent().getAttribute("tipo");
+			int permissao_usuario = (int) Sessions.getCurrent().getAttribute("permissao");
 			
-		boolean result = controller.delete(id);
-			
-			if(result)
-				Messagebox.show("Disciplina Deletada com sucesso!");
-			else
-				Messagebox.show("Não foi possivel deletar a disciplina!");
-			
-			this.LimparDadosForm();
-			this.LimparDadosLista();
-		}catch(SQLException e) {
-			Messagebox.show(String.valueOf(e));
+			if(tipo_usuario == 1 && permissao_usuario == 1) {
+					
+					ControllerDisciplina controller = new ControllerDisciplina();
+					
+					int id = Integer.parseInt(CadastroId.getText());
+					
+					try {
+						
+					boolean result = controller.delete(id);
+						
+						if(result)
+							Messagebox.show("Disciplina Deletada com sucesso!");
+						else
+							Messagebox.show("Não foi possivel deletar a disciplina!");
+						
+						this.LimparDadosForm();
+						this.LimparDadosLista();
+					}catch(SQLException e) {
+						Messagebox.show("Você deve excluir as turmas dependentes dessa disciplina antes!");
+					}
+			}else {
+				Messagebox.show("Você não tem permissão para deletar este registro");
+			}
+		}catch(NullPointerException e) {
+			Executions.sendRedirect("http://localhost:8080/ProjetoFinal/index.zul");
 		}
-		
 	}
 	
 	@Listen("onClick=#CadastroLimpar")
